@@ -40,17 +40,17 @@ jobs:
       - name: Ruff linter check
         id: ruff-linter
         if: always()
-        run: uv run ruff check --config pyproject.toml --output-format=github --exit-non-zero-on-fix pybdl/ tests/
+        run: uv run ruff check --config pyproject.toml --output-format=github --exit-non-zero-on-fix pyldb/ tests/
 
       - name: Ruff formatter check
         id: ruff-formatter
         if: always()
-        run: uv run ruff format --config pyproject.toml --check pybdl/ tests/
+        run: uv run ruff format --config pyproject.toml --check pyldb/ tests/
 
       - name: Bandit check
         id: bandit
         if: always()
-        run: uv run bandit -c pyproject.toml -r -f screen pybdl/
+        run: uv run bandit -c pyproject.toml -r -f screen pyldb/
 
   Mypy:
     name: Mypy
@@ -71,7 +71,7 @@ jobs:
       - name: Mypy check
         id: mypy
         if: always()
-        run: uv run mypy pybdl/ tests/
+        run: uv run mypy pyldb/ tests/
 
   Test:
     name: Python tests

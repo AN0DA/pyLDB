@@ -1,5 +1,5 @@
 [project]
-name = "pyBDL"
+name = "pyLDB"
 version = "0.0.1"
 description = "A Pythonic interface for BDL (Bank Danych Lokalnych) datasets."
 readme = "README.md"
@@ -108,10 +108,10 @@ exclude_dirs = ['tests/*']
 
 
 [tool.coverage.paths]
-source = ["pybdl/"]
+source = ["pyldb/"]
 
 [tool.coverage.run]
-source = ["pybdl/"]
+source = ["pyldb/"]
 omit = [
     "**/__init__.py",
 ]

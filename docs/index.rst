@@ -1,9 +1,9 @@
-.. pyBDL documentation master file, created by
+.. pyLDB documentation master file, created by
    sphinx-quickstart on Wed Jun 11 14:14:21 2025.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-pyBDL documentation
+pyLDB documentation
 ===================
 
 Add your content using ``reStructuredText`` syntax. See the

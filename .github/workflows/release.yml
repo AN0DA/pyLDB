@@ -48,17 +48,17 @@ jobs:
       - name: Ruff linter check
         id: ruff-linter
         if: always()
-        run: uv run ruff check --config pyproject.toml --output-format=github --exit-non-zero-on-fix pybdl/ tests/
+        run: uv run ruff check --config pyproject.toml --output-format=github --exit-non-zero-on-fix pyldb/ tests/
 
       - name: Ruff formatter check
         id: ruff-formatter
         if: always()
-        run: uv run ruff format --config pyproject.toml --check pybdl/ tests/
+        run: uv run ruff format --config pyproject.toml --check pyldb/ tests/
 
       - name: Bandit check
         id: bandit
         if: always()
-        run: uv run bandit -c pyproject.toml -r pybdl/
+        run: uv run bandit -c pyproject.toml -r pyldb/
 
   Test:
     name: Python tests
@@ -117,7 +117,7 @@ jobs:
         if: always()
         run: |
           source .venv/bin/activate
-          uv run mypy pybdl/ tests/
+          uv run mypy pyldb/ tests/
 
   Semantic-release:
     name: Run semantic release

@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'pyBDL'
+project = 'pyLDB'
 copyright = '2025, Mikołaj Kaczmarek'
 author = 'Mikołaj Kaczmarek'
 
