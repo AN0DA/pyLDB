@@ -1,0 +1,110 @@
+name: "PR checks"
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+
+jobs:
+  Commits:
+    name: Conventional PR
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Check PR title
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  Linting:
+    name: Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --dev
+
+      - name: Ruff linter check
+        id: ruff-linter
+        if: always()
+        run: uv run ruff check --config pyproject.toml --output-format=github --exit-non-zero-on-fix pybdl/ tests/
+
+      - name: Ruff formatter check
+        id: ruff-formatter
+        if: always()
+        run: uv run ruff format --config pyproject.toml --check pybdl/ tests/
+
+      - name: Bandit check
+        id: bandit
+        if: always()
+        run: uv run bandit -c pyproject.toml -r -f screen pybdl/
+
+  Mypy:
+    name: Mypy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --dev
+
+      - name: Mypy check
+        id: mypy
+        if: always()
+        run: uv run mypy pybdl/ tests/
+
+  Test:
+    name: Python tests
+    runs-on: ubuntu-latest
+    needs:
+      - Linting
+      - Commits
+      - Mypy
+    permissions:
+      contents: read
+      issues: read
+      checks: write
+      pull-requests: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --dev
+
+      - name: Run Python tests
+        run: uv run coverage run -m pytest --junitxml=./test_results.xml
+
+      - name: Publish test results to GitHub
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: ./test_results.xml
+          fail_on: nothing
+          pull_request_build: commit

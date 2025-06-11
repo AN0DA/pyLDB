@@ -1,0 +1,242 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  Validate:
+    name: Validate conditions
+    runs-on: ubuntu-latest
+    outputs:
+      branch_valid: ${{ steps.check_branch.outputs.branch_valid }}
+    steps:
+      - name: Check if running on main branch
+        id: check_branch
+        run: |
+          echo "Checking if the workflow is running on the main branch..."
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "branch_valid=true" >> $GITHUB_OUTPUT
+            echo "::notice::Running on the main branch."
+          else
+            echo "branch_valid=false" >> $GITHUB_OUTPUT
+            echo "::error::This action can only be run from the main branch."
+          fi
+
+  Linting:
+    name: Linting
+    runs-on: ubuntu-latest
+    needs: Validate
+    if: needs.Validate.outputs.branch_valid == 'true'
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --dev
+
+      - name: Ruff linter check
+        id: ruff-linter
+        if: always()
+        run: uv run ruff check --config pyproject.toml --output-format=github --exit-non-zero-on-fix pybdl/ tests/
+
+      - name: Ruff formatter check
+        id: ruff-formatter
+        if: always()
+        run: uv run ruff format --config pyproject.toml --check pybdl/ tests/
+
+      - name: Bandit check
+        id: bandit
+        if: always()
+        run: uv run bandit -c pyproject.toml -r pybdl/
+
+  Test:
+    name: Python tests
+    runs-on: ubuntu-latest
+    needs: Validate
+    if: needs.Validate.outputs.branch_valid == 'true'
+    permissions:
+      contents: read
+      issues: read
+      checks: write
+      pull-requests: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --dev
+
+      - name: Run Python tests
+        run: uv run coverage run -m pytest --junitxml=./test_results.xml
+
+      - name: Publish test results to GitHub
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: ./test_results.xml
+          fail_on: nothing
+          pull_request_build: commit
+
+  Mypy:
+    name: Mypy
+    runs-on: ubuntu-latest
+    needs: Validate
+    if: needs.Validate.outputs.branch_valid == 'true'
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --dev
+
+      - name: Mypy check
+        id: mypy
+        if: always()
+        run: |
+          source .venv/bin/activate
+          uv run mypy pybdl/ tests/
+
+  Semantic-release:
+    name: Run semantic release
+    runs-on: ubuntu-latest
+    needs:
+      - Linting
+      - Test
+      - Mypy
+    if: needs.Validate.outputs.branch_valid == 'true'
+    outputs:
+      new_release_version: ${{ steps.release.outputs.new_release_version }}
+      new_release_published: ${{ steps.release.outputs.new_release_published }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --dev
+
+      - name: Create .releaserc file
+        run: cp .github/.releaserc .releaserc
+
+      - name: Run Semantic Release
+        id: release
+        uses: cycjimmy/semantic-release-action@v4
+        with:
+          semantic_version: 24
+          extra_plugins: |
+            @semantic-release/changelog
+            @semantic-release/exec
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: Upload artifacts
+        if: steps.release.outputs.new_release_published == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: |
+            CHANGELOG.md
+            pyproject.toml
+
+  Publish-to-PyPI:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    needs:
+      - Semantic-release
+    if: needs.Semantic-release.outputs.new_release_published == 'true'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
+          path: .
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --dev
+
+      - name: Build package
+        run: uv build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
+
+  Changelog-pr:
+    name: Create Changelog Pull Request
+    runs-on: ubuntu-latest
+    needs:
+      - Semantic-release
+    if: needs.Semantic-release.outputs.new_release_published == 'true'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
+          path: .
+
+      - name: Setup git
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+
+      - name: Commit and push changes
+        run: |
+          git checkout -b release/${{ needs.Semantic-release.outputs.new_release_version }}
+          git add CHANGELOG.md pyproject.toml
+          git commit -m "chore: release ${{ needs.Semantic-release.outputs.new_release_version }}"
+          git push origin release/${{ needs.Semantic-release.outputs.new_release_version }}
+
+      - name: Create pull request
+        run: |
+          gh pr create \
+          -B main -H release/${{ needs.Semantic-release.outputs.new_release_version }} \
+          --title 'chore: release ${{ needs.Semantic-release.outputs.new_release_version }}' \
+          --body 'This PR updates the changelog and `pyproject.toml` for version ${{ needs.Semantic-release.outputs.new_release_version }}.'
+
+          echo "::notice::Changes committed and pushed; pull request created."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
