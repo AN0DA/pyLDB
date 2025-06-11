@@ -1,7 +1,7 @@
 [project]
 name = "pyLDB"
 version = "0.0.1"
-description = "A Pythonic interface for LDB (Bank Danych Lokalnych) datasets."
+description = "A Pythonic interface for LDB (Local Data Bank) datasets."
 readme = "README.md"
 authors = [{name = "Mikołaj Kaczmarek", email = "12432719+AN0DA@users.noreply.github.com"}]
 license = {text = "MIT"}
