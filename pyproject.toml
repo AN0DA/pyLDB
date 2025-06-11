@@ -1,7 +1,7 @@
 [project]
 name = "pyLDB"
 version = "0.0.1"
-description = "A Pythonic interface for BDL (Bank Danych Lokalnych) datasets."
+description = "A Pythonic interface for LDB (Bank Danych Lokalnych) datasets."
 readme = "README.md"
 authors = [{name = "Mikołaj Kaczmarek", email = "12432719+AN0DA@users.noreply.github.com"}]
 license = {text = "MIT"}
@@ -21,9 +21,10 @@ dependencies = [
 dev = [
     "bandit>=1.8.3",
     "mypy>=1.15.0",
-    "pytest>=8.3.5",
+    "notebook>=7.4.3",
     "pytest-cov>=6.0.0",
     "pytest-mock>=3.14.0",
+    "pytest>=8.3.5",
     "ruff>=0.9.10",
     "sphinx>=8.2.3",
     "types-requests>=2.32.0.20250306",
@@ -78,6 +79,8 @@ select = [
 ignore = ["E501", "B008"]
 unfixable = ["B"]
 
+[tool.ruff.lint.flake8-builtins]
+ignorelist = ["format"]
 
 [tool.ruff.format]
 quote-style = "double"

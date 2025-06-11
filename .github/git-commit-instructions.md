@@ -12,7 +12,7 @@ For breaking changes, add a BREAKING CHANGE: section.
 Do not use WIP in commit messages.
 
 Examples:
-feat(core): add async support to BDL client
+feat(core): add async support to LDB client
 fix(visualization): correct axis label formatting
 docs: update usage section in README
 refactor: simplify config loading logic
