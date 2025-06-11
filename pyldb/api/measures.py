@@ -5,10 +5,10 @@ from pyldb.api.client import BaseAPIClient
 
 class MeasuresAPI(BaseAPIClient):
     """
-    Client for the BDL /measures endpoints.
+    Client for the LDB /measures endpoints.
 
     Provides access to measure unit metadata (e.g. "number", "percent", "kg")
-    used for variables in the Bank Danych Lokalnych (BDL).
+    used for variables in the Local Data Bank (LDB).
     """
 
     def list_measures(

@@ -5,9 +5,9 @@ from pyldb.api.client import BaseAPIClient
 
 class VariablesAPI(BaseAPIClient):
     """
-    Client for the BDL /variables endpoints.
+    Client for the LDB /variables endpoints.
 
-    Provides access to variable metadata in the Bank Danych Lokalnych (BDL),
+    Provides access to variable metadata in the Local Data Bank (LDB),
     including listing variables (with filtering by category or aggregate), retrieving
     variable details, and accessing general variables API metadata.
     """

@@ -6,4 +6,4 @@ Version API
     :undoc-members:
     :show-inheritance:
 
-Get the BDL API version/build information.
+Get the LDB API version/build information.

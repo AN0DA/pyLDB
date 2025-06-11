@@ -5,9 +5,9 @@ from pyldb.api.client import BaseAPIClient
 
 class SubjectsAPI(BaseAPIClient):
     """
-    Client for the BDL /subjects endpoints.
+    Client for the LDB /subjects endpoints.
 
-    Provides access to the subject hierarchy (thematic areas) in the Bank Danych Lokalnych (BDL),
+    Provides access to the subject hierarchy (thematic areas) in the Local Data Bank (LDB),
     including subject browsing, detail retrieval, and metadata.
     """
 

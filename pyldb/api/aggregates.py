@@ -5,10 +5,10 @@ from pyldb.api.client import BaseAPIClient
 
 class AggregatesAPI(BaseAPIClient):
     """
-    Client for the BDL /aggregates endpoints.
+    Client for the LDB /aggregates endpoints.
 
     Provides access to aggregation level metadata, listing and detail of
-    aggregates, and aggregates API metadata within the Bank Danych Lokalnych (BDL).
+    aggregates, and aggregates API metadata within the Local Data Bank (LDB).
     """
 
     def list_aggregates(

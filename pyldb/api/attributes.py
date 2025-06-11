@@ -5,10 +5,10 @@ from pyldb.api.client import BaseAPIClient
 
 class AttributesAPI(BaseAPIClient):
     """
-    Client for the BDL /attributes endpoints.
+    Client for the LDB /attributes endpoints.
 
     Provides paginated, filterable access to attribute metadata, attribute details,
-    and API metadata for attributes in the Bank Danych Lokalnych (BDL).
+    and API metadata for attributes in the Local Data Bank (LDB).
     """
 
     def list_attributes(

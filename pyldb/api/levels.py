@@ -5,10 +5,10 @@ from pyldb.api.client import BaseAPIClient
 
 class LevelsAPI(BaseAPIClient):
     """
-    Client for the BDL /levels endpoints.
+    Client for the LDB /levels endpoints.
 
     Provides access to administrative unit aggregation levels and their metadata
-    in the Bank Danych Lokalnych (BDL).
+    in the Local Data Bank (LDB).
     """
 
     def list_levels(

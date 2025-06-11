@@ -5,9 +5,9 @@ from pyldb.api.client import BaseAPIClient
 
 class UnitsAPI(BaseAPIClient):
     """
-    Client for the BDL /units endpoints.
+    Client for the LDB /units endpoints.
 
-    Provides access to administrative unit metadata in the Bank Danych Lokalnych (BDL),
+    Provides access to administrative unit metadata in the Local Data Bank (LDB),
     including listing units (with filtering by level, parent, etc.), retrieving unit details,
     and accessing general units API metadata.
     """

@@ -1,14 +1,14 @@
 pyLDB documentation
 ===================
 
-pyLDB is a modern, Pythonic client library for the Bank Danych Lokalnych (BDL) API,
+pyLDB is a modern, Pythonic client library for the Local Data Bank (LDB, Bank Danych Lokalnych) API,
 enabling easy, robust access to Polish official statistics for data science, research,
 and applications.
 
 Features
 --------
 
-- Clean, modular API client for all BDL endpoints
+- Clean, modular API client for all LDB endpoints
 - Pandas DataFrame integration for tabular data
 - Full support for pagination, filtering, and internationalization
 - Built-in API key, language, and cache configuration

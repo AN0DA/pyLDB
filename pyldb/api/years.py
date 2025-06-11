@@ -5,9 +5,9 @@ from pyldb.api.client import BaseAPIClient
 
 class YearsAPI(BaseAPIClient):
     """
-    Client for the BDL /years endpoints.
+    Client for the LDB /years endpoints.
 
-    Provides access to available data years in the Bank Danych Lokalnych (BDL), including
+    Provides access to available data years in the Local Data Bank (LDB), including
     listing all years, retrieving year details, and accessing years API metadata.
     """
 

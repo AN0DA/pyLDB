@@ -1,4 +1,4 @@
-"""Python interface for Bank Danych Lokalnych (LDB) API."""
+"""Python interface for Local Data Bank (LDB) API."""
 
 from pyldb.client import LDB
 from pyldb.config import LDBConfig

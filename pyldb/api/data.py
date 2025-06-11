@@ -7,13 +7,13 @@ from pyldb.api.client import BaseAPIClient
 
 class DataAPI(BaseAPIClient):
     """
-    Client for all BDL /data endpoints.
+    Client for all LDB /data endpoints.
 
     Provides Pythonic, paginated, and DataFrame-ready access to all public
-    data endpoints in the Bank Danych Lokalnych (BDL) API. Supports flexible
+    data endpoints in the Local Data Bank (LDB) API. Supports flexible
     parameterization, pagination, and format options for robust data retrieval.
 
-    Methods map directly to documented BDL endpoints under the /data namespace,
+    Methods map directly to documented LDB endpoints under the /data namespace,
     enabling users to fetch statistical data by variable, unit, attribute, or locality,
     as well as check data availability for any of these entities.
     """

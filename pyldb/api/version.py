@@ -5,9 +5,9 @@ from pyldb.api.client import BaseAPIClient
 
 class VersionAPI(BaseAPIClient):
     """
-    Client for the BDL /version endpoint.
+    Client for the LDB /version endpoint.
 
-    Provides access to version and build information for the Bank Danych Lokalnych (BDL) API.
+    Provides access to version and build information for the Local Data Bank (LDB) API.
     """
 
     def get_version(
