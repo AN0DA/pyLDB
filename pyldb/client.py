@@ -1,6 +1,6 @@
 from types import SimpleNamespace
 
-from pyldb.api.data import DataAPI
+import pyldb.api as api
 from pyldb.config import LDBConfig
 
 
@@ -23,4 +23,13 @@ class LDB:
         self.config = config or LDBConfig()
 
         self.api = SimpleNamespace()
-        self.api.data = DataAPI(self.config)
+        self.api.aggregates = api.AggregatesAPI(self.config)
+        self.api.attributes = api.AttributesAPI(self.config)
+        self.api.data = api.DataAPI(self.config)
+        self.api.levels = api.LevelsAPI(self.config)
+        self.api.measures = api.MeasuresAPI(self.config)
+        self.api.subjects = api.SubjectsAPI(self.config)
+        self.api.units = api.UnitsAPI(self.config)
+        self.api.variables = api.VariablesAPI(self.config)
+        self.api.version = api.VersionAPI(self.config)
+        self.api.years = api.YearsAPI(self.config)
