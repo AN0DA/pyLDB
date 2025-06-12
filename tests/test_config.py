@@ -52,3 +52,27 @@ def test_config_defaults(monkeypatch: MonkeyPatch) -> None:
     assert config.language == DEFAULT_LANGUAGE
     assert config.use_cache is True
     assert config.cache_expire_after == DEFAULT_CACHE_EXPIRY
+    assert config.proxy_url is None
+    assert config.proxy_username is None
+    assert config.proxy_password is None
+
+
+def test_config_proxy_direct_init() -> None:
+    config = LDBConfig(
+        api_key="abc123", proxy_url="http://proxy.example.com:8080", proxy_username="user", proxy_password="pass"
+    )
+    assert config.proxy_url == "http://proxy.example.com:8080"
+    assert config.proxy_username == "user"
+    assert config.proxy_password == "pass"
+
+
+def test_config_proxy_env(monkeypatch: MonkeyPatch) -> None:
+    monkeypatch.setenv("LDB_API_KEY", "envkey")
+    monkeypatch.setenv("LDB_PROXY_URL", "http://proxy.example.com:8080")
+    monkeypatch.setenv("LDB_PROXY_USERNAME", "envuser")
+    monkeypatch.setenv("LDB_PROXY_PASSWORD", "envpass")
+
+    config = LDBConfig(api_key=None)
+    assert config.proxy_url == "http://proxy.example.com:8080"
+    assert config.proxy_username == "envuser"
+    assert config.proxy_password == "envpass"

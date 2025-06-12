@@ -12,15 +12,29 @@ class LDBConfig:
     """Configuration for LDB API client.
 
     The configuration can be set in three ways (in order of precedence):
+
     1. Direct parameter passing
     2. Environment variables
     3. Default values
+
+
+    Attributes:
+        api_key: API key for authentication
+        language: Language code for API responses (default: "pl")
+        use_cache: Whether to use request caching (default: True)
+        cache_expire_after: Cache expiration time in seconds (default: 3600)
+        proxy_url: Optional URL of the proxy server
+        proxy_username: Optional username for proxy authentication
+        proxy_password: Optional password for proxy authentication
     """
 
     api_key: str | None = field(default=None)
     language: str = field(default=DEFAULT_LANGUAGE)
     use_cache: bool = field(default=True)
     cache_expire_after: int = field(default=DEFAULT_CACHE_EXPIRY)
+    proxy_url: str | None = field(default=None)
+    proxy_username: str | None = field(default=None)
+    proxy_password: str | None = field(default=None)
 
     def __post_init__(self) -> None:
         """Initialize configuration values from environment variables if not set directly."""
@@ -46,3 +60,13 @@ class LDBConfig:
                 self.cache_expire_after = int(env_cache_expiry)
             except ValueError as e:
                 raise ValueError("LDB_CACHE_EXPIRY must be an integer") from e
+
+        # Get proxy settings from environment if not provided directly
+        if self.proxy_url is None:
+            self.proxy_url = os.getenv("LDB_PROXY_URL")
+
+        if self.proxy_username is None:
+            self.proxy_username = os.getenv("LDB_PROXY_USERNAME")
+
+        if self.proxy_password is None:
+            self.proxy_password = os.getenv("LDB_PROXY_PASSWORD")
