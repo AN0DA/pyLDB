@@ -121,7 +121,8 @@ class BaseAPIClient:
             query.update(extra_query)
 
         # Always include language setting
-        query.setdefault("lang", self.config.language)
+        lang = self.config.language.value if hasattr(self.config.language, 'value') else self.config.language
+        query.setdefault("lang", lang)
 
         # Merge headers if provided
         req_headers: dict[str, str] = {k: str(v) for k, v in self.session.headers.items()}
@@ -163,7 +164,8 @@ class BaseAPIClient:
         query = params.copy() if params else {}
         if extra_query:
             query.update(extra_query)
-        query.setdefault("lang", self.config.language)
+        lang = self.config.language.value if hasattr(self.config.language, 'value') else self.config.language
+        query.setdefault("lang", lang)
         query["page-size"] = page_size
 
         fetched = 0

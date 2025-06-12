@@ -1,9 +1,15 @@
 import os
 from dataclasses import dataclass, field
+import enum
 
 # API Constants
 LDB_API_BASE_URL = "https://bdl.stat.gov.pl/api/v1"
-DEFAULT_LANGUAGE = "pl"
+
+class Language(enum.Enum):
+    PL = "pl"
+    EN = "en"
+
+DEFAULT_LANGUAGE = Language.EN
 DEFAULT_CACHE_EXPIRY = 3600  # 1 hour in seconds
 
 
@@ -29,7 +35,7 @@ class LDBConfig:
     """
 
     api_key: str | None = field(default=None)
-    language: str = field(default=DEFAULT_LANGUAGE)
+    language: Language = field(default=DEFAULT_LANGUAGE)
     use_cache: bool = field(default=True)
     cache_expire_after: int = field(default=DEFAULT_CACHE_EXPIRY)
     proxy_url: str | None = field(default=None)
@@ -47,7 +53,10 @@ class LDBConfig:
         # Get language from environment if not provided directly
         env_language = os.getenv("LDB_LANGUAGE")
         if env_language:
-            self.language = env_language
+            try:
+                self.language = Language(env_language.lower())
+            except ValueError:
+                raise ValueError(f"LDB_LANGUAGE must be one of: {[l.value for l in Language]}")
 
         # Get cache settings from environment if not provided directly
         env_use_cache = os.getenv("LDB_USE_CACHE")

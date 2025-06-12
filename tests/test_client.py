@@ -3,7 +3,7 @@ from types import SimpleNamespace
 from pytest import MonkeyPatch
 
 from pyldb.client import LDB
-from pyldb.config import LDBConfig
+from pyldb.config import LDBConfig, Language
 
 
 def test_ldb_initializes_all_apis(monkeypatch: MonkeyPatch) -> None:
@@ -51,6 +51,6 @@ def test_ldb_config_default(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setenv("LDB_CACHE_EXPIRY", "42")
     ldb = LDB()
     assert ldb.config.api_key == "envkey"
-    assert ldb.config.language == "en"
+    assert ldb.config.language == Language.EN
     assert ldb.config.use_cache is False
     assert ldb.config.cache_expire_after == 42
