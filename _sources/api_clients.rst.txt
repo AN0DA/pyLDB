@@ -5,12 +5,12 @@ The pyLDB library provides a comprehensive set of API clients for interacting wi
 All API endpoints are accessible through the main client's `.api` attribute. See :doc:`Main Client <main_client>` for details about the main client.
 
 Available Endpoints
------------------
+-------------------
 
 The following endpoints are available through the `.api` attribute:
 
 Aggregates
-~~~~~~~~~
+~~~~~~~~~~
 
 .. automodule:: pyldb.api.aggregates
     :members:
@@ -18,7 +18,7 @@ Aggregates
     :show-inheritance:
 
 Attributes
-~~~~~~~~~
+~~~~~~~~~~
 
 .. automodule:: pyldb.api.attributes
     :members:

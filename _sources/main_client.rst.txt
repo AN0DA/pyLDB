@@ -10,13 +10,13 @@ The `LDB` class is the main entry point for the library. While it currently prov
 it is designed to be extended with additional features for data processing, analysis, and visualization in future versions.
 
 API Access
----------
+----------
 
 Currently, the main functionality is provided through the `.api` attribute, which gives access to all LDB API endpoints.
 See the :doc:`API Clients <api_clients>` documentation for details about available endpoints.
 
 Future Features
---------------
+---------------
 
 The main client is being developed to include:
 
