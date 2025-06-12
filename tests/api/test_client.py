@@ -96,27 +96,79 @@ def test_paginated_request_all_pages(base_client: BaseAPIClient, api_url: str) -
     endpoint = "data/paged"
     url = f"{api_url}/data/paged"
     # Page 0
-    url0 = url + "?lang=en&page-size=2&page=0"
-    responses.add(responses.GET, url0, json={"results": [{"id": 1}, {"id": 2}], "totalRecords": 4}, status=200)
-    # Page 1
+    url0 = url + "?lang=en&page-size=2"
     url1 = url + "?lang=en&page-size=2&page=1"
-    responses.add(responses.GET, url1, json={"results": [{"id": 3}, {"id": 4}], "totalRecords": 4}, status=200)
+    responses.add(
+        responses.GET,
+        url0,
+        json={
+            "results": [{"id": 1}, {"id": 2}],
+            "totalRecords": 4,
+            "links": {"next": url1},
+        },
+        status=200,
+    )
+    # Page 1 (last): links has navigation fields but no 'next'
+    responses.add(
+        responses.GET,
+        url1,
+        json={
+            "results": [{"id": 3}, {"id": 4}],
+            "totalRecords": 4,
+            "links": {
+                "first": url0,
+                "prev": url0,
+                "self": url1,
+                "last": url1,
+            },
+        },
+        status=200,
+    )
     pages = list(base_client._paginated_request(endpoint, results_key="results", page_size=2, return_all=True))
     assert len(pages) == 2
     assert pages[0]["results"] == [{"id": 1}, {"id": 2}]
     assert pages[1]["results"] == [{"id": 3}, {"id": 4}]
+    # Ensure the correct URLs were called
+    assert responses.calls[0].request.url.startswith(url0)
+    assert responses.calls[1].request.url.startswith(url1)
 
 
 @responses.activate
 def test_fetch_all_results(base_client: BaseAPIClient, api_url: str) -> None:
     endpoint = "data/paged"
     url = f"{api_url}/data/paged"
-    url0 = url + "?lang=en&page-size=2&page=0"
+    url0 = url + "?lang=en&page-size=2"
     url1 = url + "?lang=en&page-size=2&page=1"
-    responses.add(responses.GET, url0, json={"results": [{"id": 1}, {"id": 2}], "totalRecords": 3}, status=200)
-    responses.add(responses.GET, url1, json={"results": [{"id": 3}], "totalRecords": 3}, status=200)
+    responses.add(
+        responses.GET,
+        url0,
+        json={
+            "results": [{"id": 1}, {"id": 2}],
+            "totalRecords": 3,
+            "links": {"next": url1},
+        },
+        status=200,
+    )
+    responses.add(
+        responses.GET,
+        url1,
+        json={
+            "results": [{"id": 3}],
+            "totalRecords": 3,
+            "links": {
+                "first": url0,
+                "prev": url0,
+                "self": url1,
+                "last": url1,
+            },
+        },
+        status=200,
+    )
     results = base_client.fetch_all_results(endpoint, results_key="results", page_size=2)
     assert results == [{"id": 1}, {"id": 2}, {"id": 3}]
+    # Ensure the correct URLs were called
+    assert responses.calls[0].request.url.startswith(url0)
+    assert responses.calls[1].request.url.startswith(url1)
 
 
 def test_client_with_proxy() -> None:

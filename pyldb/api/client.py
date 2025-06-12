@@ -166,12 +166,22 @@ class BaseAPIClient:
         query.setdefault("lang", self.config.language)
         query["page-size"] = page_size
 
-        page = 0
         fetched = 0
+        next_url = None
+        first = True
 
         while True:
-            query["page"] = page
-            resp = self._make_request(endpoint, method=method, params=query, headers=headers)
+            if first:
+                # First request: use endpoint and params
+                resp = self._make_request(endpoint, method=method, params=query, headers=headers)
+                first = False
+            else:
+                # Next requests: use the next_url directly
+                if not next_url:
+                    break
+                response = self.session.request(method, next_url, headers=self.session.headers)
+                resp = self._handle_response(response)
+
             if results_key not in resp or not resp[results_key]:
                 break
             yield resp
@@ -179,12 +189,11 @@ class BaseAPIClient:
             fetched += 1
             if not return_all or (max_pages and fetched >= max_pages):
                 break
-            if resp.get("totalRecords") is not None:
-                # Stop if we've got all records
-                total = resp["totalRecords"]
-                if (page + 1) * page_size >= total:
-                    break
-            page += 1
+            # Get next page URL from response; stop if 'next' is not present in links
+            links = resp.get("links", {})
+            next_url = links.get("next")
+            if "next" not in links:
+                break
 
     def fetch_all_results(
         self,

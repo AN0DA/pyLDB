@@ -30,7 +30,6 @@ def test_list_variables_with_filters(variables_api: VariablesAPI, api_url: str) 
         "name": "pop",
         "sort": "name",
         "lang": "en",
-        "page": "0",
         "page-size": "100",
     }
     url = f"{api_url}/variables?{urlencode(params)}"

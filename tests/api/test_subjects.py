@@ -24,7 +24,7 @@ def test_list_subjects(subjects_api: SubjectsAPI, api_url: str) -> None:
 
 @responses.activate
 def test_list_subjects_with_parent_and_sort(subjects_api: SubjectsAPI, api_url: str) -> None:
-    params = {"parent-id": "A", "sort": "name", "lang": "en", "page": "0", "page-size": "100"}
+    params = {"parent-id": "A", "sort": "name", "lang": "en", "page-size": "100"}
     url = f"{api_url}/subjects?{urlencode(params)}"
     responses.add(responses.GET, url, json={"results": []}, status=200)
     # Also add page 1 for completeness

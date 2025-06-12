@@ -24,7 +24,7 @@ def test_list_years(years_api: YearsAPI, api_url: str) -> None:
 
 @responses.activate
 def test_list_years_with_sort(years_api: YearsAPI, api_url: str) -> None:
-    params = {"sort": "Id", "lang": "en", "page": "0", "page-size": "100"}
+    params = {"sort": "Id", "lang": "en", "page-size": "100"}
     url = f"{api_url}/years?{urlencode(params)}"
     responses.add(responses.GET, url, json={"results": []}, status=200)
     # Also add page 1 for pagination completeness

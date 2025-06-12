@@ -24,7 +24,7 @@ def test_list_measures(measures_api: MeasuresAPI, api_url: str) -> None:
 
 @responses.activate
 def test_list_measures_with_sort(measures_api: MeasuresAPI, api_url: str) -> None:
-    params = {"sort": "Name", "lang": "en", "page": "0", "page-size": "100"}
+    params = {"sort": "Name", "lang": "en", "page-size": "100"}
     url = f"{api_url}/measures?{urlencode(params)}"
     responses.add(responses.GET, url, json={"results": []}, status=200)
     # Also add page 1 for pagination completeness (even if not needed for empty result)

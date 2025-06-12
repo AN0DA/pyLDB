@@ -30,7 +30,6 @@ def test_list_units_with_filters(units_api: UnitsAPI, api_url: str) -> None:
         "name": "Warsaw",
         "sort": "name",
         "lang": "en",
-        "page": "0",
         "page-size": "100",
     }
     url = f"{api_url}/units?{urlencode(params)}"

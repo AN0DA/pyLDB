@@ -22,7 +22,7 @@ def test_list_aggregates(aggregates_api: AggregatesAPI, api_url: str) -> None:
 
 @responses.activate
 def test_list_aggregates_with_sort(aggregates_api: AggregatesAPI, api_url: str) -> None:
-    url = f"{api_url}/aggregates?sort=Name&lang=en&page=0&page-size=100"
+    url = f"{api_url}/aggregates?sort=Name&lang=en&page-size=100"
     responses.add(responses.GET, url, json={"results": []}, status=200)
     aggregates_api.list_aggregates(sort="Name")
     # With responses, you can inspect the call arguments:
@@ -30,7 +30,6 @@ def test_list_aggregates_with_sort(aggregates_api: AggregatesAPI, api_url: str) 
     assert called_url is not None
     assert "sort=Name" in called_url
     assert "lang=en" in called_url
-    assert "page=0" in called_url
     assert "page-size=100" in called_url
 
 
