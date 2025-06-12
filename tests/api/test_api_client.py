@@ -5,7 +5,7 @@ import responses
 from requests import PreparedRequest
 
 from pyldb.api.client import BaseAPIClient
-from pyldb.config import LDBConfig
+from pyldb.config import Language, LDBConfig
 
 
 # Type for PreparedRequest with req_kwargs added by responses
@@ -194,7 +194,7 @@ def test_make_request_with_proxy(base_client: BaseAPIClient, api_url: str) -> No
     config = LDBConfig(
         api_key="dummy-api-key",
         proxy_url="http://proxy.example.com:8080",
-        language="en",
+        language=Language.EN,
     )
     client = BaseAPIClient(config)
 
