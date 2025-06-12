@@ -33,7 +33,40 @@
             
   <div class="section" id="configuration">
 <h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
-<p>The <cite>LDBConfig</cite> class manages all configuration for authentication, language, and caching.</p>
+<p>The <cite>LDBConfig</cite> class manages all configuration for authentication, language, caching, and proxy settings.</p>
+<div class="section" id="proxy-configuration">
+<h2>Proxy Configuration<a class="headerlink" href="#proxy-configuration" title="Permalink to this headline">¶</a></h2>
+<p>The library supports HTTP/HTTPS proxy configuration through the following settings:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">proxy_url</span></code>: The URL of the proxy server (e.g., “<a class="reference external" href="http://proxy.example.com:8080">http://proxy.example.com:8080</a>”)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">proxy_username</span></code>: Optional username for proxy authentication</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">proxy_password</span></code>: Optional password for proxy authentication</p></li>
+</ul>
+<p>These settings can be configured in three ways (in order of precedence):</p>
+<ol class="arabic simple">
+<li><p>Direct parameter passing when creating the config</p></li>
+<li><p>Environment variables:
+- <code class="docutils literal notranslate"><span class="pre">LDB_PROXY_URL</span></code>
+- <code class="docutils literal notranslate"><span class="pre">LDB_PROXY_USERNAME</span></code>
+- <code class="docutils literal notranslate"><span class="pre">LDB_PROXY_PASSWORD</span></code></p></li>
+<li><p>Default values (all None)</p></li>
+</ol>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Direct configuration</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">LDBConfig</span><span class="p">(</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+    <span class="n">proxy_url</span><span class="o">=</span><span class="s2">&quot;http://proxy.example.com:8080&quot;</span><span class="p">,</span>
+    <span class="n">proxy_username</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">,</span>
+    <span class="n">proxy_password</span><span class="o">=</span><span class="s2">&quot;pass&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Or through environment variables</span>
+<span class="c1"># export LDB_PROXY_URL=&quot;http://proxy.example.com:8080&quot;</span>
+<span class="c1"># export LDB_PROXY_USERNAME=&quot;user&quot;</span>
+<span class="c1"># export LDB_PROXY_PASSWORD=&quot;pass&quot;</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -57,10 +90,16 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="main_client.html">Main Client</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_clients.html">API Clients</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#proxy-configuration">Proxy Configuration</a></li>
+</ul>
+</li>
 </ul>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#proxy-configuration">Proxy Configuration</a></li>
+</ul>
+</li>
 </ul>
 
 <div class="relations">
