@@ -157,6 +157,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Update __init__.py version
+        env:
+          NEW_VERSION: ${{ steps.release.outputs.new_release_version }}
+        run: sed -i "s/__version__ = .*/__version__ = \"$NEW_VERSION\"/" pyldb/__init__.py
+
 
       - name: Upload artifacts
         if: steps.release.outputs.new_release_published == 'true'
@@ -166,6 +171,7 @@ jobs:
           path: |
             CHANGELOG.md
             pyproject.toml
+            pyldb/__init__.py
 
   Publish-to-PyPI:
     name: Publish to PyPI
@@ -226,7 +232,7 @@ jobs:
       - name: Commit and push changes
         run: |
           git checkout -b release/${{ needs.Semantic-release.outputs.new_release_version }}
-          git add CHANGELOG.md pyproject.toml
+          git add CHANGELOG.md pyproject.toml pyldb/__init__.py
           git commit -m "chore: release ${{ needs.Semantic-release.outputs.new_release_version }}"
           git push origin release/${{ needs.Semantic-release.outputs.new_release_version }}
 
@@ -235,7 +241,7 @@ jobs:
           gh pr create \
           -B main -H release/${{ needs.Semantic-release.outputs.new_release_version }} \
           --title 'chore: release ${{ needs.Semantic-release.outputs.new_release_version }}' \
-          --body 'This PR updates the changelog and `pyproject.toml` for version ${{ needs.Semantic-release.outputs.new_release_version }}.'
+          --body 'This PR updates the changelog, `pyproject.toml` and `__init__.py` for version ${{ needs.Semantic-release.outputs.new_release_version }}.'
 
           echo "::notice::Changes committed and pushed; pull request created."
         env:
