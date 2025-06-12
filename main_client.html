@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Configuration &#8212; pyLDB  documentation</title>
+    <title>Main Client &#8212; pyLDB  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -14,7 +14,8 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="API Clients" href="api_clients.html" />
+    <link rel="next" title="API Clients" href="api_clients.html" />
+    <link rel="prev" title="pyLDB documentation" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -31,9 +32,26 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="configuration">
-<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
-<p>The <cite>LDBConfig</cite> class manages all configuration for authentication, language, and caching.</p>
+  <div class="section" id="main-client">
+<h1>Main Client<a class="headerlink" href="#main-client" title="Permalink to this headline">¶</a></h1>
+<p>The <cite>LDB</cite> class is the main entry point for the library. While it currently provides access to the LDB API through the <cite>.api</cite> attribute,
+it is designed to be extended with additional features for data processing, analysis, and visualization in future versions.</p>
+<div class="section" id="api-access">
+<h2>API Access<a class="headerlink" href="#api-access" title="Permalink to this headline">¶</a></h2>
+<p>Currently, the main functionality is provided through the <cite>.api</cite> attribute, which gives access to all LDB API endpoints.
+See the <a class="reference internal" href="api_clients.html"><span class="doc">API Clients</span></a> documentation for details about available endpoints.</p>
+</div>
+<div class="section" id="future-features">
+<h2>Future Features<a class="headerlink" href="#future-features" title="Permalink to this headline">¶</a></h2>
+<p>The main client is being developed to include:</p>
+<ul class="simple">
+<li><p>Data processing capabilities</p></li>
+<li><p>Statistical analysis tools</p></li>
+<li><p>Data visualization helpers</p></li>
+<li><p>Geographic data processing</p></li>
+<li><p>Caching and performance optimizations</p></li>
+</ul>
+</div>
 </div>
 
 
@@ -55,19 +73,24 @@
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">API Reference</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="main_client.html">Main Client</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_clients.html">API Clients</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Main Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#api-access">API Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#future-features">Future Features</a></li>
 </ul>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a></li>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_clients.html">API Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="api_clients.html" title="previous chapter">API Clients</a></li>
+      <li>Previous: <a href="index.html" title="previous chapter">pyLDB documentation</a></li>
+      <li>Next: <a href="api_clients.html" title="next chapter">API Clients</a></li>
   </ul></li>
 </ul>
 </div>
@@ -101,7 +124,7 @@
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="_sources/config.rst.txt"
+      <a href="_sources/main_client.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
