@@ -46,9 +46,10 @@ API Reference
 .. toctree::
    :maxdepth: 2
    :caption: API Reference
-   :glob:
 
-   api/*
+   main_client
+   api_clients
+   config
 
 Configuration Reference
 -----------------------
