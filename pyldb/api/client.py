@@ -8,7 +8,18 @@ from pyldb.config import LDB_API_BASE_URL, LDBConfig
 
 
 class BaseAPIClient:
-    """Base client for LDB API interactions."""
+    """Base client for LDB API interactions.
+
+    This client handles common functionality for all API endpoints including:
+    - Authentication
+    - Request caching
+    - Proxy configuration
+    - Response handling
+    - Pagination
+
+    The client supports HTTP/HTTPS proxy configuration through the LDBConfig settings.
+    Proxy authentication is supported by providing proxy_username and proxy_password.
+    """
 
     def __init__(self, config: LDBConfig, extra_headers: dict[str, str] | None = None):
         """
@@ -29,6 +40,24 @@ class BaseAPIClient:
             )
         else:
             self.session = Session()
+
+        if config.proxy_url:
+            proxies = {
+                "http": config.proxy_url,
+                "https": config.proxy_url,
+            }
+            if config.proxy_username and config.proxy_password:
+                from urllib.parse import urlparse, urlunparse
+
+                parsed = urlparse(config.proxy_url)
+                auth = f"{config.proxy_username}:{config.proxy_password}"
+                new_netloc = f"{auth}@{parsed.netloc}"
+                auth_proxy_url = urlunparse(parsed._replace(netloc=new_netloc))
+                proxies = {
+                    "http": auth_proxy_url,
+                    "https": auth_proxy_url,
+                }
+            self.session.proxies.update(proxies)
 
         # Set default headers
         self.session.headers.update(

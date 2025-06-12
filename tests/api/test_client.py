@@ -1,8 +1,16 @@
+from typing import Any, cast
+
 import pytest
 import responses
+from requests import PreparedRequest
 
 from pyldb.api.client import BaseAPIClient
 from pyldb.config import LDBConfig
+
+
+# Type for PreparedRequest with req_kwargs added by responses
+class ResponsesPreparedRequest(PreparedRequest):
+    req_kwargs: dict[str, Any]
 
 
 @pytest.fixture
@@ -109,3 +117,41 @@ def test_fetch_all_results(base_client: BaseAPIClient, api_url: str) -> None:
     responses.add(responses.GET, url1, json={"results": [{"id": 3}], "totalRecords": 3}, status=200)
     results = base_client.fetch_all_results(endpoint, results_key="results", page_size=2)
     assert results == [{"id": 1}, {"id": 2}, {"id": 3}]
+
+
+def test_client_with_proxy() -> None:
+    config = LDBConfig(api_key="dummy-api-key", proxy_url="http://proxy.example.com:8080")
+    client = BaseAPIClient(config)
+    assert client.session.proxies["http"] == "http://proxy.example.com:8080"
+    assert client.session.proxies["https"] == "http://proxy.example.com:8080"
+
+
+def test_client_with_authenticated_proxy() -> None:
+    config = LDBConfig(
+        api_key="dummy-api-key", proxy_url="http://proxy.example.com:8080", proxy_username="user", proxy_password="pass"
+    )
+    client = BaseAPIClient(config)
+    expected_proxy = "http://user:pass@proxy.example.com:8080"
+    assert client.session.proxies["http"] == expected_proxy
+    assert client.session.proxies["https"] == expected_proxy
+
+
+@responses.activate
+def test_make_request_with_proxy(base_client: BaseAPIClient, api_url: str) -> None:
+    # Configure client with proxy
+    config = LDBConfig(
+        api_key="dummy-api-key",
+        proxy_url="http://proxy.example.com:8080",
+        language="en",
+    )
+    client = BaseAPIClient(config)
+
+    endpoint = "data/proxy"
+    url = f"{api_url}/data/proxy?lang=en"
+    responses.add(responses.GET, url, json={"results": []}, status=200)
+
+    client._make_request(endpoint)
+    request = cast(ResponsesPreparedRequest, responses.calls[0].request)
+    # Verify proxy settings in the request kwargs
+    assert request.req_kwargs["proxies"]["http"] == "http://proxy.example.com:8080"
+    assert request.req_kwargs["proxies"]["https"] == "http://proxy.example.com:8080"
