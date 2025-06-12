@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pyLDB documentation &#8212; pyLDB  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Aggregates API" href="api/api_aggregates.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="pyldb-documentation">
+<h1>pyLDB documentation<a class="headerlink" href="#pyldb-documentation" title="Permalink to this headline">¶</a></h1>
+<p>pyLDB is a modern, Pythonic client library for the Local Data Bank (LDB, Bank Danych Lokalnych) API,
+enabling easy, robust access to Polish official statistics for data science, research,
+and applications.</p>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Clean, modular API client for all LDB endpoints</p></li>
+<li><p>Pandas DataFrame integration for tabular data</p></li>
+<li><p>Full support for pagination, filtering, and internationalization</p></li>
+<li><p>Built-in API key, language, and cache configuration</p></li>
+<li><p>Open source, tested, and ready for data analysis and visualization</p></li>
+</ul>
+</div>
+<div class="section" id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyldb</span> <span class="kn">import</span> <span class="n">LDB</span><span class="p">,</span> <span class="n">LDBConfig</span>
+<span class="n">ldb</span> <span class="o">=</span> <span class="n">LDB</span><span class="p">(</span><span class="n">LDBConfig</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">))</span>  <span class="c1"># Reads config from environment or defaults</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">ldb</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_data_by_variable</span><span class="p">(</span><span class="n">variable_id</span><span class="o">=</span><span class="s2">&quot;3643&quot;</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="mi">2021</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>Configure your API key and options via environment variables or directly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyldb</span> <span class="kn">import</span> <span class="n">LDBConfig</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">LDBConfig</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">,</span> <span class="n">use_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ldb</span> <span class="o">=</span> <span class="n">LDB</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or set environment variables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">LDB_API_KEY</span><span class="o">=</span><span class="n">your</span><span class="o">-</span><span class="n">api</span><span class="o">-</span><span class="n">key</span>
+<span class="n">export</span> <span class="n">LDB_LANGUAGE</span><span class="o">=</span><span class="n">en</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/api_aggregates.html">Aggregates API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_attributes.html">Attributes API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_client.html">API Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_data.html">Data API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_levels.html">Levels API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_measures.html">Measures API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_subjects.html">Subjects API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_units.html">Units API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_variables.html">Variables API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_version.html">Version API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_years.html">Years API</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="configuration-reference">
+<h2>Configuration Reference<a class="headerlink" href="#configuration-reference" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="contributing-license">
+<h2>Contributing &amp; License<a class="headerlink" href="#contributing-license" title="Permalink to this headline">¶</a></h2>
+<p>pyLDB is open source under the MIT license. Contributions and issues are welcome!
+For details, see the <a class="reference external" href="https://github.com/AN0DA/pyldb">GitHub repository</a>.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">pyLDB</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/api_aggregates.html">Aggregates API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_attributes.html">Attributes API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_client.html">API Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_data.html">Data API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_levels.html">Levels API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_measures.html">Measures API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_subjects.html">Subjects API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_units.html">Units API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_variables.html">Variables API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_version.html">Version API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_years.html">Years API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="api/api_aggregates.html" title="next chapter">Aggregates API</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2025, Mikołaj Kaczmarek.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
