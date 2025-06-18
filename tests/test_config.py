@@ -1,11 +1,11 @@
 import pytest
 from pytest import MonkeyPatch
 
-from pyldb.config import DEFAULT_CACHE_EXPIRY, DEFAULT_LANGUAGE, LDBConfig, Language
+from pyldb.config import DEFAULT_CACHE_EXPIRY, DEFAULT_LANGUAGE, Language, LDBConfig
 
 
 def test_config_direct_init() -> None:
-    config = LDBConfig(api_key="abc123", language="en", use_cache=False, cache_expire_after=123)
+    config = LDBConfig(api_key="abc123", language=Language.EN, use_cache=False, cache_expire_after=123)
     assert config.api_key == "abc123"
     assert config.language == Language.EN
     assert config.use_cache is False
