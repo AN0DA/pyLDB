@@ -39,11 +39,11 @@ def test_list_subjects_with_parent_and_sort(subjects_api: SubjectsAPI, api_url: 
 
 
 @responses.activate
-def test_get_subject_info(subjects_api: SubjectsAPI, api_url: str) -> None:
+def test_get_subject(subjects_api: SubjectsAPI, api_url: str) -> None:
     url = f"{api_url}/subjects/B?lang=en"
     payload = {"id": "B", "name": "Labour market"}
     responses.add(responses.GET, url, json=payload, status=200)
-    result = subjects_api.get_subject_info(subject_id="B")
+    result = subjects_api.get_subject(subject_id="B")
     assert result["id"] == "B"
     assert result["name"] == "Labour market"
 

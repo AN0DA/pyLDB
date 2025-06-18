@@ -44,11 +44,11 @@ def test_list_levels_with_sort(levels_api: LevelsAPI, api_url: str) -> None:
 
 
 @responses.activate
-def test_get_level_info(levels_api: LevelsAPI, api_url: str) -> None:
+def test_get_level(levels_api: LevelsAPI, api_url: str) -> None:
     url = f"{api_url}/levels/3?lang=en"
     payload = {"id": 3, "name": "Powiat"}
     responses.add(responses.GET, url, json=payload, status=200)
-    result = levels_api.get_level_info(level_id=3)
+    result = levels_api.get_level(level_id=3)
     assert result["id"] == 3
     assert result["name"] == "Powiat"
 

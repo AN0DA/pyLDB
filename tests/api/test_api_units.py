@@ -48,11 +48,11 @@ def test_list_units_with_filters(units_api: UnitsAPI, api_url: str) -> None:
 
 
 @responses.activate
-def test_get_unit_info(units_api: UnitsAPI, api_url: str) -> None:
+def test_get_unit(units_api: UnitsAPI, api_url: str) -> None:
     url = f"{api_url}/units/PL?lang=en"
     payload = {"id": "PL", "name": "Poland"}
     responses.add(responses.GET, url, json=payload, status=200)
-    result = units_api.get_unit_info(unit_id="PL")
+    result = units_api.get_unit(unit_id="PL")
     assert result["id"] == "PL"
     assert result["name"] == "Poland"
 

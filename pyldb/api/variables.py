@@ -61,10 +61,9 @@ class VariablesAPI(BaseAPIClient):
                 results_key="results",
             )
         else:
-            resp = self._make_request("variables", params=params, extra_query=extra_query)
-            return resp.get("results", [])
+            return self.fetch_single_result("variables", results_key="results", params=params, extra_query=extra_query)
 
-    def get_variable_info(
+    def get_variable(
         self,
         variable_id: str,
         extra_query: dict[str, Any] | None = None,
@@ -81,21 +80,67 @@ class VariablesAPI(BaseAPIClient):
         Returns:
             Dictionary with variable metadata.
         """
-        return self._make_request(f"variables/{variable_id}", extra_query=extra_query)
+        return self.fetch_single_result(f"variables/{variable_id}", extra_query=extra_query)
 
-    def get_variables_metadata(
+    def search_variables(
         self,
+        name: str | None = None,
+        category_id: str | None = None,
+        aggregate_id: str | None = None,
+        sort: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
         extra_query: dict[str, Any] | None = None,
-    ) -> dict[str, Any]:
+        all_pages: bool = True,
+    ) -> list[dict[str, Any]]:
+        """
+        Search for variables by name and optional filters.
+
+        Maps to: GET /variables/search
+
+        Args:
+            name: Substring to search in variable name.
+            category_id: Optional category ID to filter variables.
+            aggregate_id: Optional aggregate ID to filter variables.
+            sort: Optional sorting order.
+            page_size: Number of results per page.
+            max_pages: Maximum number of pages to fetch (None for all).
+            extra_query: Additional query parameters.
+            all_pages: If True, fetch all pages; otherwise, fetch only the first.
+
+        Returns:
+            List of variable metadata dictionaries.
+        """
+        params: dict[str, Any] = {}
+        if name:
+            params["name"] = name
+        if category_id:
+            params["category-id"] = category_id
+        if aggregate_id:
+            params["aggregate-id"] = aggregate_id
+        if sort:
+            params["sort"] = sort
+        if all_pages:
+            return self.fetch_all_results(
+                "variables/search",
+                params=params,
+                extra_query=extra_query,
+                page_size=page_size,
+                max_pages=max_pages,
+                results_key="results",
+            )
+        else:
+            return self.fetch_single_result(
+                "variables/search", results_key="results", params=params, extra_query=extra_query
+            )
+
+    def get_variables_metadata(self) -> dict[str, Any]:
         """
         Retrieve general metadata and version information for the /variables endpoint.
 
         Maps to: GET /variables/metadata
 
-        Args:
-            extra_query: Additional query parameters, e.g. {'lang': 'en'}.
-
         Returns:
             Dictionary with endpoint metadata and versioning info.
         """
-        return self._make_request("variables/metadata", extra_query=extra_query)
+        return self.fetch_single_result("variables/metadata")

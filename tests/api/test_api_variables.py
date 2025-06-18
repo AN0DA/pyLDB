@@ -48,11 +48,11 @@ def test_list_variables_with_filters(variables_api: VariablesAPI, api_url: str) 
 
 
 @responses.activate
-def test_get_variable_info(variables_api: VariablesAPI, api_url: str) -> None:
+def test_get_variable(variables_api: VariablesAPI, api_url: str) -> None:
     url = f"{api_url}/variables/1?lang=en"
     payload = {"id": "1", "name": "Population"}
     responses.add(responses.GET, url, json=payload, status=200)
-    result = variables_api.get_variable_info(variable_id="1")
+    result = variables_api.get_variable(variable_id="1")
     assert result["id"] == "1"
     assert result["name"] == "Population"
 

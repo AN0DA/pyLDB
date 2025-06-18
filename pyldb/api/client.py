@@ -121,7 +121,7 @@ class BaseAPIClient:
             query.update(extra_query)
 
         # Always include language setting
-        lang = self.config.language.value if hasattr(self.config.language, 'value') else self.config.language
+        lang = self.config.language.value if hasattr(self.config.language, "value") else self.config.language
         query.setdefault("lang", lang)
 
         # Merge headers if provided
@@ -164,7 +164,7 @@ class BaseAPIClient:
         query = params.copy() if params else {}
         if extra_query:
             query.update(extra_query)
-        lang = self.config.language.value if hasattr(self.config.language, 'value') else self.config.language
+        lang = self.config.language.value if hasattr(self.config.language, "value") else self.config.language
         query.setdefault("lang", lang)
         query["page-size"] = page_size
 
@@ -207,14 +207,28 @@ class BaseAPIClient:
         results_key: str = "results",
         page_size: int = 100,
         max_pages: int | None = None,
-    ) -> list[dict[str, Any]]:
+        return_metadata: bool = False,
+    ) -> list[dict[str, Any]] | tuple[list[dict[str, Any]], dict[str, Any]]:
         """
         Convenience method to fetch and combine all paginated results.
 
+        Args:
+            endpoint: API endpoint
+            method: HTTP method (default: GET)
+            params: Query parameters (e.g., year, lang, page, page-size, etc.)
+            extra_query: Additional query parameters to merge in.
+            headers: Optional request headers.
+            results_key: Key to extract results array from response
+            page_size: Number of items per page
+            max_pages: Max pages to fetch (None = all)
+            return_metadata: If True, also return metadata dict (see docstring).
+
         Returns:
-            List of all results across pages.
+            List of all results across pages, or (results, metadata) tuple if return_metadata is True.
         """
         all_results = []
+        metadata: dict[str, Any] = {}
+        first_page = True
         for page in self._paginated_request(
             endpoint,
             method=method,
@@ -226,5 +240,57 @@ class BaseAPIClient:
             max_pages=max_pages,
             return_all=True,
         ):
+            if first_page and return_metadata:
+                # Collect metadata from the first page
+                metadata = {k: v for k, v in page.items() if k not in {results_key, "page", "pageSize", "links"}}
+                first_page = False
             all_results.extend(page.get(results_key, []))
+        if return_metadata:
+            return all_results, metadata
         return all_results
+
+    def fetch_single_result(
+        self,
+        endpoint: str,
+        results_key: str | None = None,
+        method: str = "GET",
+        params: dict[str, Any] | None = None,
+        extra_query: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
+        return_metadata: bool = False,
+    ) -> dict[str, Any] | list[dict[str, Any]] | tuple[list[dict[str, Any]], dict[str, Any]]:
+        """
+        Fetch a single (non-paginated) result from an endpoint.
+
+        Args:
+            endpoint: API endpoint
+            results_key: Key to extract results from response (default: None, returns full response)
+            method: HTTP method (default: GET)
+            params: Query parameters
+            extra_query: Additional query parameters
+            headers: Optional request headers
+            return_metadata: If True, also return metadata dict (see docstring).
+
+        Returns:
+            Dictionary or list of dictionaries with result data, or (results, metadata) tuple if return_metadata is True and results_key is not None.
+        """
+        response = self._make_request(
+            endpoint=endpoint,
+            method=method,
+            params=params,
+            extra_query=extra_query,
+            headers=headers,
+        )
+
+        if results_key is not None:
+            if isinstance(response, dict) and results_key in response:
+                results = response[results_key]
+                if return_metadata:
+                    metadata = {
+                        k: v for k, v in response.items() if k not in {results_key, "page", "pageSize", "links"}
+                    }
+                    return results, metadata
+                return results
+            else:
+                raise ValueError(f"Response does not contain key '{results_key}'")
+        return response

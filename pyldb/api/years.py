@@ -14,10 +14,7 @@ class YearsAPI(BaseAPIClient):
     def list_years(
         self,
         sort: str | None = None,
-        page_size: int = 100,
-        max_pages: int | None = None,
         extra_query: dict[str, Any] | None = None,
-        all_pages: bool = True,
     ) -> list[dict[str, Any]]:
         """
         List all available data years.
@@ -26,10 +23,7 @@ class YearsAPI(BaseAPIClient):
 
         Args:
             sort: Optional sorting order, e.g. 'Id', '-Id'.
-            page_size: Number of results per page.
-            max_pages: Maximum number of pages to fetch (None for all).
             extra_query: Additional query parameters, e.g. {'lang': 'en'}.
-            all_pages: If True, fetch all pages; otherwise, fetch only the first.
 
         Returns:
             List of year metadata dictionaries.
@@ -38,20 +32,9 @@ class YearsAPI(BaseAPIClient):
         if sort:
             params["sort"] = sort
 
-        if all_pages:
-            return self.fetch_all_results(
-                "years",
-                params=params,
-                extra_query=extra_query,
-                page_size=page_size,
-                max_pages=max_pages,
-                results_key="results",
-            )
-        else:
-            resp = self._make_request("years", params=params, extra_query=extra_query)
-            return resp.get("results", [])
+        return self.fetch_single_result("years", results_key="results", params=params, extra_query=extra_query)
 
-    def get_year_info(
+    def get_year(
         self,
         year_id: int,
         extra_query: dict[str, Any] | None = None,
@@ -68,21 +51,15 @@ class YearsAPI(BaseAPIClient):
         Returns:
             Dictionary with year metadata.
         """
-        return self._make_request(f"years/{year_id}", extra_query=extra_query)
+        return self.fetch_single_result(f"years/{year_id}", extra_query=extra_query)
 
-    def get_years_metadata(
-        self,
-        extra_query: dict[str, Any] | None = None,
-    ) -> dict[str, Any]:
+    def get_years_metadata(self) -> dict[str, Any]:
         """
         Retrieve general metadata and version information for the /years endpoint.
 
         Maps to: GET /years/metadata
 
-        Args:
-            extra_query: Additional query parameters, e.g. {'lang': 'en'}.
-
         Returns:
             Dictionary with endpoint metadata and versioning info.
         """
-        return self._make_request("years/metadata", extra_query=extra_query)
+        return self.fetch_single_result("years/metadata")
