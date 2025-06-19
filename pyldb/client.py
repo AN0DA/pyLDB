@@ -20,8 +20,15 @@ class LDB:
             2. Environment variables (LDB_API_KEY, LDB_LANGUAGE, etc.)
             3. Default values
         """
-        self.config = config or LDBConfig()
+        if isinstance(config, dict):
+            config_obj = LDBConfig(**config)
+        elif isinstance(config, LDBConfig) or config is None:
+            config_obj = config or LDBConfig()
+        else:
+            raise TypeError(f"config must be a dict, LDBConfig, or None, got {type(config)}")
+        self.config = config_obj
 
+        # Initialize API namespace first
         self.api = SimpleNamespace()
         self.api.aggregates = api.AggregatesAPI(self.config)
         self.api.attributes = api.AttributesAPI(self.config)
