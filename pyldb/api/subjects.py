@@ -140,7 +140,9 @@ class SubjectsAPI(BaseAPIClient):
                 results_key="results",
             )
         else:
-            return await self.afetch_single_result("subjects", results_key="results", params=params, extra_query=extra_query)
+            return await self.afetch_single_result(
+                "subjects", results_key="results", params=params, extra_query=extra_query
+            )
 
     async def aget_subject(
         self,

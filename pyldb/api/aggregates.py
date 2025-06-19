@@ -73,7 +73,9 @@ class AggregatesAPI(BaseAPIClient):
         params: dict[str, Any] = {}
         if sort:
             params["sort"] = sort
-        return await self.afetch_single_result("aggregates", results_key="results", params=params, extra_query=extra_query)
+        return await self.afetch_single_result(
+            "aggregates", results_key="results", params=params, extra_query=extra_query
+        )
 
     async def aget_aggregate(self, aggregate_id: str) -> dict[str, Any]:
         """

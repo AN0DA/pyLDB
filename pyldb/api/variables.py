@@ -178,7 +178,9 @@ class VariablesAPI(BaseAPIClient):
                 results_key="results",
             )
         else:
-            return await self.afetch_single_result("variables", results_key="results", params=params, extra_query=extra_query)
+            return await self.afetch_single_result(
+                "variables", results_key="results", params=params, extra_query=extra_query
+            )
 
     async def aget_variable(
         self,
