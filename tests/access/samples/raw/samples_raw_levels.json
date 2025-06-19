@@ -1,0 +1,40 @@
+{
+  "list_levels":  [
+      {
+        "id": 0,
+        "name": "Poziom Polski"
+      },
+      {
+        "id": 1,
+        "name": "Poziom Makroregionów"
+      },
+      {
+        "id": 2,
+        "name": "Poziom Województw"
+      },
+      {
+        "id": 3,
+        "name": "Poziom Regionów"
+      },
+      {
+        "id": 4,
+        "name": "Poziom Podregionów"
+      },
+      {
+        "id": 5,
+        "name": "Poziom Powiatów"
+      },
+      {
+        "id": 6,
+        "name": "Poziom Gmin"
+      },
+      {
+        "id": 7,
+        "name": "Poziom miejscowości statystycznej"
+      }
+    ],
+  "get_level": {
+    "id": 0,
+    "name": "Poziom Polski"
+  }
+}

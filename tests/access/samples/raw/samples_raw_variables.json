@@ -1,0 +1,220 @@
+{"list_variables": [
+    {
+      "id": 6,
+      "subjectId": "P1312",
+      "n1": "ogółem",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 7,
+      "subjectId": "P1312",
+      "n1": "mężczyźni",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 8,
+      "subjectId": "P1312",
+      "n1": "kobiety",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 34032,
+      "subjectId": "P1313",
+      "n1": "ogółem",
+      "n2": "ogółem",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 9,
+      "subjectId": "P1313",
+      "n1": "ogółem",
+      "n2": "24 lata i mniej",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 10,
+      "subjectId": "P1313",
+      "n1": "ogółem",
+      "n2": "25-29",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 11,
+      "subjectId": "P1313",
+      "n1": "ogółem",
+      "n2": "30-39",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 12,
+      "subjectId": "P1313",
+      "n1": "ogółem",
+      "n2": "40-59",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 259865,
+      "subjectId": "P1313",
+      "n1": "ogółem",
+      "n2": "40-49",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 259862,
+      "subjectId": "P1313",
+      "n1": "ogółem",
+      "n2": "50-59",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    }
+  ],
+"get_variable": {
+  "id": 10,
+  "subjectId": "P1313",
+  "n1": "ogółem",
+  "n2": "25-29",
+  "level": 6,
+  "measureUnitId": 26,
+  "measureUnitName": "osoba",
+  "years": [
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ]
+},
+"search_variables": [
+    {
+      "id": 8,
+      "subjectId": "P1312",
+      "n1": "kobiety",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 34034,
+      "subjectId": "P1313",
+      "n1": "kobiety",
+      "n2": "ogółem",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 9181,
+      "subjectId": "P1313",
+      "n1": "kobiety",
+      "n2": "24 lata i mniej",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 9182,
+      "subjectId": "P1313",
+      "n1": "kobiety",
+      "n2": "25-29",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 9183,
+      "subjectId": "P1313",
+      "n1": "kobiety",
+      "n2": "30-39",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 9184,
+      "subjectId": "P1313",
+      "n1": "kobiety",
+      "n2": "40-59",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 259867,
+      "subjectId": "P1313",
+      "n1": "kobiety",
+      "n2": "40-49",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 259864,
+      "subjectId": "P1313",
+      "n1": "kobiety",
+      "n2": "50-59",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 9185,
+      "subjectId": "P1313",
+      "n1": "kobiety",
+      "n2": "60 lat i więcej",
+      "level": 6,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    },
+    {
+      "id": 3096,
+      "subjectId": "P1317",
+      "n1": "kobiety",
+      "level": 5,
+      "measureUnitId": 26,
+      "measureUnitName": "osoba"
+    }
+  ]}

@@ -1,0 +1,164 @@
+{
+    "list_years": [
+    {
+      "id": 1995,
+      "hasLocalities": false,
+      "quarterly": "R"
+    },
+    {
+      "id": 1996,
+      "hasLocalities": false,
+      "quarterly": "R"
+    },
+    {
+      "id": 1997,
+      "hasLocalities": false,
+      "quarterly": "R"
+    },
+    {
+      "id": 1998,
+      "hasLocalities": true,
+      "quarterly": "R"
+    },
+    {
+      "id": 1999,
+      "hasLocalities": false,
+      "quarterly": "R"
+    },
+    {
+      "id": 2000,
+      "hasLocalities": false,
+      "quarterly": "R"
+    },
+    {
+      "id": 2001,
+      "hasLocalities": false,
+      "quarterly": "R"
+    },
+    {
+      "id": 2002,
+      "hasLocalities": true,
+      "quarterly": "R"
+    },
+    {
+      "id": 2003,
+      "hasLocalities": false,
+      "quarterly": "R"
+    },
+    {
+      "id": 2004,
+      "hasLocalities": false,
+      "quarterly": "R"
+    },
+    {
+      "id": 2005,
+      "hasLocalities": false,
+      "quarterly": "M"
+    },
+    {
+      "id": 2006,
+      "hasLocalities": false,
+      "quarterly": "M"
+    },
+    {
+      "id": 2007,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2008,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2009,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2010,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2011,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2012,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2013,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2014,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2015,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2016,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2017,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2018,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2019,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2020,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2021,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2022,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2023,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2024,
+      "hasLocalities": true,
+      "quarterly": "M"
+    },
+    {
+      "id": 2025,
+      "hasLocalities": false,
+      "quarterly": "K"
+    }
+  ],
+    "get_year": {
+  "id": 2024,
+  "hasLocalities": true,
+  "quarterly": "M"
+}
+}

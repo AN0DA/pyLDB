@@ -1,0 +1,639 @@
+{
+  "get_data_by_variable": [
+    {
+      "id": "000000000000",
+      "name": "POLSKA",
+      "values": [
+        {
+          "year": "1995",
+          "val": 168,
+          "attrId": 1
+        },
+        {
+          "year": "1996",
+          "val": 101,
+          "attrId": 1
+        },
+        {
+          "year": "1997",
+          "val": 56,
+          "attrId": 1
+        },
+        {
+          "year": "1998",
+          "val": 429,
+          "attrId": 1
+        },
+        {
+          "year": "1999",
+          "val": 272,
+          "attrId": 1
+        },
+        {
+          "year": "2000",
+          "val": 170,
+          "attrId": 1
+        },
+        {
+          "year": "2001",
+          "val": 99,
+          "attrId": 1
+        },
+        {
+          "year": "2002",
+          "val": 372,
+          "attrId": 1
+        },
+        {
+          "year": "2003",
+          "val": 223,
+          "attrId": 1
+        },
+        {
+          "year": "2004",
+          "val": 136,
+          "attrId": 1
+        },
+        {
+          "year": "2005",
+          "val": 70,
+          "attrId": 1
+        },
+        {
+          "year": "2006",
+          "val": 470,
+          "attrId": 1
+        },
+        {
+          "year": "2007",
+          "val": 300,
+          "attrId": 1
+        },
+        {
+          "year": "2008",
+          "val": 177,
+          "attrId": 1
+        },
+        {
+          "year": "2009",
+          "val": 108,
+          "attrId": 1
+        },
+        {
+          "year": "2010",
+          "val": 447,
+          "attrId": 1
+        },
+        {
+          "year": "2011",
+          "val": 274,
+          "attrId": 1
+        },
+        {
+          "year": "2012",
+          "val": 177,
+          "attrId": 1
+        },
+        {
+          "year": "2013",
+          "val": 109,
+          "attrId": 1
+        },
+        {
+          "year": "2014",
+          "val": 451,
+          "attrId": 1
+        },
+        {
+          "year": "2015",
+          "val": 299,
+          "attrId": 1
+        },
+        {
+          "year": "2016",
+          "val": 172,
+          "attrId": 1
+        },
+        {
+          "year": "2017",
+          "val": 95,
+          "attrId": 1
+        },
+        {
+          "year": "2018",
+          "val": 368,
+          "attrId": 1
+        },
+        {
+          "year": "2019",
+          "val": 257,
+          "attrId": 1
+        },
+        {
+          "year": "2020",
+          "val": 189,
+          "attrId": 1
+        },
+        {
+          "year": "2021",
+          "val": 117,
+          "attrId": 1
+        },
+        {
+          "year": "2022",
+          "val": 65,
+          "attrId": 1
+        },
+        {
+          "year": "2023",
+          "val": 38,
+          "attrId": 1
+        },
+        {
+          "year": "2024",
+          "val": 276,
+          "attrId": 1
+        }
+      ]
+    },
+    {
+      "id": "010000000000",
+      "name": "MAKROREGION POŁUDNIOWY",
+      "values": [
+        {
+          "year": "1995",
+          "val": 21,
+          "attrId": 1
+        },
+        {
+          "year": "1996",
+          "val": 10,
+          "attrId": 1
+        },
+        {
+          "year": "1997",
+          "val": 9,
+          "attrId": 1
+        },
+        {
+          "year": "1998",
+          "val": 58,
+          "attrId": 1
+        },
+        {
+          "year": "1999",
+          "val": 37,
+          "attrId": 1
+        },
+        {
+          "year": "2000",
+          "val": 21,
+          "attrId": 1
+        },
+        {
+          "year": "2001",
+          "val": 9,
+          "attrId": 1
+        },
+        {
+          "year": "2002",
+          "val": 38,
+          "attrId": 1
+        },
+        {
+          "year": "2003",
+          "val": 29,
+          "attrId": 1
+        },
+        {
+          "year": "2004",
+          "val": 17,
+          "attrId": 1
+        },
+        {
+          "year": "2005",
+          "val": 9,
+          "attrId": 1
+        },
+        {
+          "year": "2006",
+          "val": 64,
+          "attrId": 1
+        },
+        {
+          "year": "2007",
+          "val": 44,
+          "attrId": 1
+        },
+        {
+          "year": "2008",
+          "val": 26,
+          "attrId": 1
+        },
+        {
+          "year": "2009",
+          "val": 21,
+          "attrId": 1
+        },
+        {
+          "year": "2010",
+          "val": 67,
+          "attrId": 1
+        },
+        {
+          "year": "2011",
+          "val": 37,
+          "attrId": 1
+        },
+        {
+          "year": "2012",
+          "val": 21,
+          "attrId": 1
+        },
+        {
+          "year": "2013",
+          "val": 12,
+          "attrId": 1
+        },
+        {
+          "year": "2014",
+          "val": 61,
+          "attrId": 1
+        },
+        {
+          "year": "2015",
+          "val": 37,
+          "attrId": 1
+        },
+        {
+          "year": "2016",
+          "val": 20,
+          "attrId": 1
+        },
+        {
+          "year": "2017",
+          "val": 10,
+          "attrId": 1
+        },
+        {
+          "year": "2018",
+          "val": 72,
+          "attrId": 1
+        },
+        {
+          "year": "2019",
+          "val": 57,
+          "attrId": 1
+        },
+        {
+          "year": "2020",
+          "val": 45,
+          "attrId": 1
+        },
+        {
+          "year": "2021",
+          "val": 27,
+          "attrId": 1
+        },
+        {
+          "year": "2022",
+          "val": 17,
+          "attrId": 1
+        },
+        {
+          "year": "2023",
+          "val": 7,
+          "attrId": 1
+        },
+        {
+          "year": "2024",
+          "val": 50,
+          "attrId": 1
+        }
+      ]
+    },
+    {
+      "id": "011200000000",
+      "name": "MAŁOPOLSKIE",
+      "values": [
+        {
+          "year": "1995",
+          "val": 8,
+          "attrId": 1
+        },
+        {
+          "year": "1996",
+          "val": 5,
+          "attrId": 1
+        },
+        {
+          "year": "1997",
+          "val": 4,
+          "attrId": 1
+        },
+        {
+          "year": "1998",
+          "val": 25,
+          "attrId": 1
+        },
+        {
+          "year": "1999",
+          "val": 14,
+          "attrId": 1
+        },
+        {
+          "year": "2000",
+          "val": 5,
+          "attrId": 1
+        },
+        {
+          "year": "2001",
+          "val": 1,
+          "attrId": 1
+        },
+        {
+          "year": "2002",
+          "val": 11,
+          "attrId": 1
+        },
+        {
+          "year": "2003",
+          "val": 11,
+          "attrId": 1
+        },
+        {
+          "year": "2004",
+          "val": 6,
+          "attrId": 1
+        },
+        {
+          "year": "2005",
+          "val": 3,
+          "attrId": 1
+        },
+        {
+          "year": "2006",
+          "val": 33,
+          "attrId": 1
+        },
+        {
+          "year": "2007",
+          "val": 21,
+          "attrId": 1
+        },
+        {
+          "year": "2008",
+          "val": 13,
+          "attrId": 1
+        },
+        {
+          "year": "2009",
+          "val": 10,
+          "attrId": 1
+        },
+        {
+          "year": "2010",
+          "val": 34,
+          "attrId": 1
+        },
+        {
+          "year": "2011",
+          "val": 22,
+          "attrId": 1
+        },
+        {
+          "year": "2012",
+          "val": 12,
+          "attrId": 1
+        },
+        {
+          "year": "2013",
+          "val": 8,
+          "attrId": 1
+        },
+        {
+          "year": "2014",
+          "val": 30,
+          "attrId": 1
+        },
+        {
+          "year": "2015",
+          "val": 15,
+          "attrId": 1
+        },
+        {
+          "year": "2016",
+          "val": 6,
+          "attrId": 1
+        },
+        {
+          "year": "2017",
+          "val": 3,
+          "attrId": 1
+        },
+        {
+          "year": "2018",
+          "val": 37,
+          "attrId": 1
+        },
+        {
+          "year": "2019",
+          "val": 29,
+          "attrId": 1
+        },
+        {
+          "year": "2020",
+          "val": 19,
+          "attrId": 1
+        },
+        {
+          "year": "2021",
+          "val": 13,
+          "attrId": 1
+        },
+        {
+          "year": "2022",
+          "val": 8,
+          "attrId": 1
+        },
+        {
+          "year": "2023",
+          "val": 4,
+          "attrId": 1
+        },
+        {
+          "year": "2024",
+          "val": 19,
+          "attrId": 1
+        }
+      ]
+    }
+  ],
+  "get_data_by_unit": {
+  "totalRecords": 1,
+  "unitId": "023000000000",
+  "unitName": "WIELKOPOLSKIE",
+  "aggregateId": 1,
+  "results": [
+    {
+      "id": 9,
+      "measureUnitId": 26,
+      "lastUpdate": "2025-05-14T15:05:15.743",
+      "values": [
+        {
+          "year": "1995",
+          "val": 12,
+          "attrId": 1
+        },
+        {
+          "year": "1996",
+          "val": 11,
+          "attrId": 1
+        },
+        {
+          "year": "1997",
+          "val": 6,
+          "attrId": 1
+        },
+        {
+          "year": "1998",
+          "val": 42,
+          "attrId": 1
+        },
+        {
+          "year": "1999",
+          "val": 30,
+          "attrId": 1
+        },
+        {
+          "year": "2000",
+          "val": 18,
+          "attrId": 1
+        },
+        {
+          "year": "2001",
+          "val": 14,
+          "attrId": 1
+        },
+        {
+          "year": "2002",
+          "val": 40,
+          "attrId": 1
+        },
+        {
+          "year": "2003",
+          "val": 25,
+          "attrId": 1
+        },
+        {
+          "year": "2004",
+          "val": 13,
+          "attrId": 1
+        },
+        {
+          "year": "2005",
+          "val": 6,
+          "attrId": 1
+        },
+        {
+          "year": "2006",
+          "val": 43,
+          "attrId": 1
+        },
+        {
+          "year": "2007",
+          "val": 26,
+          "attrId": 1
+        },
+        {
+          "year": "2008",
+          "val": 20,
+          "attrId": 1
+        },
+        {
+          "year": "2009",
+          "val": 11,
+          "attrId": 1
+        },
+        {
+          "year": "2010",
+          "val": 55,
+          "attrId": 1
+        },
+        {
+          "year": "2011",
+          "val": 33,
+          "attrId": 1
+        },
+        {
+          "year": "2012",
+          "val": 24,
+          "attrId": 1
+        },
+        {
+          "year": "2013",
+          "val": 10,
+          "attrId": 1
+        },
+        {
+          "year": "2014",
+          "val": 66,
+          "attrId": 1
+        },
+        {
+          "year": "2015",
+          "val": 50,
+          "attrId": 1
+        },
+        {
+          "year": "2016",
+          "val": 27,
+          "attrId": 1
+        },
+        {
+          "year": "2017",
+          "val": 15,
+          "attrId": 1
+        },
+        {
+          "year": "2018",
+          "val": 42,
+          "attrId": 1
+        },
+        {
+          "year": "2019",
+          "val": 31,
+          "attrId": 1
+        },
+        {
+          "year": "2020",
+          "val": 24,
+          "attrId": 1
+        },
+        {
+          "year": "2021",
+          "val": 12,
+          "attrId": 1
+        },
+        {
+          "year": "2022",
+          "val": 9,
+          "attrId": 1
+        },
+        {
+          "year": "2023",
+          "val": 4,
+          "attrId": 1
+        },
+        {
+          "year": "2024",
+          "val": 40,
+          "attrId": 1
+        }
+      ]
+    }
+  ]
+},
+  "get_data_by_variable_locality": [], 
+  "get_data_by_unit_locality": []
+}

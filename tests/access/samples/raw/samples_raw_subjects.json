@@ -1,0 +1,264 @@
+{
+  "list_subjects": [
+    {
+      "id": "K15",
+      "name": "CENY",
+      "hasVariables": false,
+      "children": ["G186", "G187", "G188", "G189", "G405"],
+      "levels": [3]
+    },
+    {
+      "id": "K43",
+      "name": "FINANSE PRZEDSIĘBIORSTW (DANE KWARTALNE)",
+      "hasVariables": false,
+      "children": ["G418", "G576"],
+      "levels": [3]
+    },
+    {
+      "id": "K27",
+      "name": "FINANSE PUBLICZNE",
+      "hasVariables": false,
+      "children": [
+        "G195",
+        "G197",
+        "G199",
+        "G201",
+        "G423",
+        "G425",
+        "G497",
+        "G569",
+        "G612"
+      ],
+      "levels": [3, 5, 6]
+    },
+    {
+      "id": "K47",
+      "name": "FUNDUSZE UNIJNE (DANE PÓŁROCZNE)",
+      "hasVariables": false,
+      "children": [
+        "G556",
+        "G580",
+        "G586",
+        "G587",
+        "G588",
+        "G589",
+        "G590",
+        "G608",
+        "G624",
+        "G663",
+        "G665",
+        "G667"
+      ],
+      "levels": [3, 5, 6]
+    },
+    {
+      "id": "K11",
+      "name": "GOSPODARKA MIESZKANIOWA I KOMUNALNA",
+      "hasVariables": false,
+      "children": [
+        "G57",
+        "G59",
+        "G231",
+        "G233",
+        "G236",
+        "G335",
+        "G402",
+        "G562",
+        "G619",
+        "G621",
+        "G630"
+      ],
+      "levels": [3, 4, 5, 6]
+    },
+    {
+      "id": "K44",
+      "name": "GOSPODARKA SPOŁECZNA",
+      "hasVariables": false,
+      "children": ["G446", "G568", "G629"],
+      "levels": [3, 5]
+    },
+    {
+      "id": "K16",
+      "name": "HANDEL I GASTRONOMIA",
+      "hasVariables": false,
+      "children": ["G64", "G65", "G66", "G67", "G190", "G566"],
+      "levels": [3, 6, 7]
+    },
+    {
+      "id": "K28",
+      "name": "INWESTYCJE I ŚRODKI TRWAŁE",
+      "hasVariables": false,
+      "children": ["G277", "G278", "G438", "G539", "G567"],
+      "levels": [3, 4, 5]
+    },
+    {
+      "id": "K23",
+      "name": "KULTURA ",
+      "hasVariables": false,
+      "children": [
+        "G226",
+        "G227",
+        "G228",
+        "G229",
+        "G370",
+        "G533",
+        "G617",
+        "G653"
+      ],
+      "levels": [3, 5, 6, 7]
+    },
+    {
+      "id": "K24",
+      "name": "KULTURA FIZYCZNA, SPORT I REKREACJA",
+      "hasVariables": false,
+      "children": ["G334", "G662"],
+      "levels": [3, 4, 5, 6, 7]
+    }
+  ],
+  "get_subject": {
+    "id": "K43",
+    "name": "FINANSE PRZEDSIĘBIORSTW (DANE KWARTALNE)",
+    "hasVariables": false,
+    "children": ["G418", "G576"],
+    "years": [
+      2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016,
+      2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
+    ],
+    "availability": [
+      {
+        "year": "2005",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2006",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2007",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2008",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2009",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2010",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2011",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2012",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2013",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2014",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2015",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2016",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2017",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2018",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2019",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2020",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2021",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2022",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2023",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2024",
+        "levels": [3],
+        "quarterly": "K"
+      },
+      {
+        "year": "2025",
+        "levels": [3],
+        "quarterly": "K"
+      }
+    ],
+    "dimensions": [],
+    "lastUpdate": "2025-04-01T12:17:02.09",
+    "description": "Dane kwartalne. Dane dotyczące wyników finansowych przedsiębiorstw niefinansowych prezentuje się w dostosowaniu do ustawy o rachunkowości z dnia 29 września 1994 r. (Dz. U. z 2023 r. poz. 120). Brak danych dla regionów. Wszystkie prezentowane wartości podawane są w cenach bieżących."
+  },
+  "search_subjects": [
+    {
+      "id": "K43",
+      "name": "FINANSE PRZEDSIĘBIORSTW (DANE KWARTALNE)",
+      "hasVariables": false,
+      "children": ["G418", "G576"],
+      "levels": [3]
+    },
+    {
+      "id": "K27",
+      "name": "FINANSE PUBLICZNE",
+      "hasVariables": false,
+      "children": [
+        "G195",
+        "G197",
+        "G199",
+        "G201",
+        "G423",
+        "G425",
+        "G497",
+        "G569",
+        "G612"
+      ],
+      "levels": [3, 5, 6]
+    }
+  ]
+}

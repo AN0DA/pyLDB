@@ -1,0 +1,118 @@
+{
+  "list_attributes":  [
+      {
+        "id": 0,
+        "name": "0",
+        "symbol": " ",
+        "description": ""
+      },
+      {
+        "id": 1,
+        "name": "wartość",
+        "symbol": " ",
+        "description": ""
+      },
+      {
+        "id": 3,
+        "name": "wartość",
+        "symbol": "k",
+        "description": "Agregat może być niekompletny"
+      },
+      {
+        "id": 4,
+        "name": ". lub 0",
+        "symbol": "x",
+        "description": "Brak informacji, konieczność zachowania tajemnicy statystycznej lub wypełnienie pozycji jest niemożliwe albo niecelowe"
+      },
+      {
+        "id": 7,
+        "name": "0",
+        "symbol": "a",
+        "description": "Wartość mniejsza niż przyjęty format prezentacji"
+      },
+      {
+        "id": 9,
+        "name": "wartość",
+        "symbol": "s",
+        "description": "Szacunki wstępne"
+      },
+      {
+        "id": 11,
+        "name": "wartość",
+        "symbol": "M",
+        "description": "Zmiany metodologiczne"
+      },
+      {
+        "id": 13,
+        "name": "wartość",
+        "symbol": "K",
+        "description": "Zmiany metodologiczne, agregat może być niekompletny"
+      },
+      {
+        "id": 14,
+        "name": ". lub 0",
+        "symbol": "X",
+        "description": "Zmiany metodologiczne, brak informacji, konieczność zachowania tajemnicy statystycznej lub wypełnienie pozycji jest niemożliwe albo niecelowe"
+      },
+      {
+        "id": 15,
+        "name": "-",
+        "symbol": " ",
+        "description": "Znak '-' oznacza brak informacji z powodu: zmiany poziomu prezentacji, zmian wprowadzonych do wykazu jednostek terytorialnych lub modyfikacji listy cech w danym okresie sprawozdawczym"
+      },
+      {
+        "id": 17,
+        "name": "0",
+        "symbol": "A",
+        "description": "Zmiany metodologiczne, wartość mniejsza niż przyjęty format prezentacji"
+      },
+      {
+        "id": 20,
+        "name": "wartość",
+        "symbol": "v",
+        "description": "Dane o niskiej precyzji"
+      },
+      {
+        "id": 21,
+        "name": "wartość",
+        "symbol": "v",
+        "description": "Dane o niskiej precyzji"
+      },
+      {
+        "id": 50,
+        "name": "- lub 0",
+        "symbol": "n",
+        "description": "Dana jeszcze niedostępna, będzie dostępna"
+      },
+      {
+        "id": 91,
+        "name": ". lub 0",
+        "symbol": "x",
+        "description": "Brak informacji, konieczność zachowania tajemnicy statystycznej lub wypełnienie pozycji jest niemożliwe albo niecelowe"
+      },
+      {
+        "id": 94,
+        "name": "0",
+        "symbol": "z",
+        "description": "Wartość znacząca, wartość zerowa wynika z bilansu niezerowych danych wejściowych algorytmu, np. przyrost naturalny, jeśli liczba zgonów jest równa liczbie urodzeń"
+      },
+      {
+        "id": 97,
+        "name": "wartość",
+        "symbol": "p",
+        "description": "Łącznie dla powiatu i miasta na prawach powiatu"
+      },
+      {
+        "id": 98,
+        "name": "0",
+        "symbol": "Z",
+        "description": "Zmiany metodologiczne, wartość znacząca, wartość zerowa wynika z bilansu niezerowych danych wejściowych algorytmu, np. przyrost naturalny, jeśli liczba zgonów jest równa liczbie urodzeń"
+      }
+    ],
+  "get_attribute": {
+    "id": 91,
+    "name": ". lub 0",
+    "symbol": "x",
+    "description": "Brak informacji, konieczność zachowania tajemnicy statystycznej lub wypełnienie pozycji jest niemożliwe albo niecelowe"
+  }
+}

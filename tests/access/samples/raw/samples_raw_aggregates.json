@@ -1,0 +1,56 @@
+{
+  "list_aggregates":  [
+      {
+        "id": 1,
+        "name": "ogółem",
+        "level": 7,
+        "description": "Agregaty dla cech zasilanych na poziomie: <br />- miejscowości statystycznej - suma danych dla miejscowości statystycznych na poziom gminy, powiatu, podregionu, regionu, województwa, makroregionu i Polski, <br />- gminy - suma danych dla gmin o rodzaju 1, 2, 3 (lub suma rodzaj jednostki = 4 i rodzaj jednostki = 5) na poziom powiatu, podregionu, regionu, województwa, makroregionu i Polski, <br />- powiatu - suma danych dla powiatów na poziom podregionu, regionu, województwa, makroregionu i Polski, <br />- podregionu - suma danych dla podregionów na poziom regionu, województwa, makroregionu i Polski, <br />- województwa/regionu - suma danych dla regionów na poziom województwa, makroregionu i Polski, <br />- makroregionu - suma danych dla makroregionów na poziom Polski. <br />"
+      },
+      {
+        "id": 2,
+        "name": "gminy miejskie",
+        "level": 5,
+        "description": "Suma danych dla gmin miejskich (rodzaj jednostki = 1 )"
+      },
+      {
+        "id": 3,
+        "name": "gminy miejsko-wiejskie",
+        "level": 5,
+        "description": "Suma danych dla gmin miejsko-wiejskich (rodzaj jednostki = 3 lub suma rodzaj jednostki = 4 i rodzaj jednostki = 5)"
+      },
+      {
+        "id": 4,
+        "name": "gminy wiejskie",
+        "level": 5,
+        "description": "Suma danych dla gmin wiejskich (rodzaj jednostki = 2)"
+      },
+      {
+        "id": 7,
+        "name": "miasta",
+        "level": 5,
+        "description": "Suma danych dla miast, czyli gmin miejskich (rodzaj jednostki = 1 ) i miast w gminach miejsko-wiejskich (rodzaj jednostki = 4)"
+      },
+      {
+        "id": 8,
+        "name": "wieś",
+        "level": 5,
+        "description": "Suma danych dla wsi, czyli gmin wiejskich (rodzaj jednostki = 2) i obszarów wiejskich w gminach miejsko-wiejskich (rodzaj jednostki = 5)"
+      },
+      {
+        "id": 91,
+        "name": "Górnośląsko-Zagłębiowska Metropolia",
+        "level": 3
+      },
+      {
+        "id": 92,
+        "name": "Metropolia Krakowska",
+        "level": 3
+      }
+    ],
+  "get_aggregate": {
+    "id": 1,
+    "name": "ogółem",
+    "level": 7,
+    "description": "Agregaty dla cech zasilanych na poziomie: <br />- miejscowości statystycznej - suma danych dla miejscowości statystycznych na poziom gminy, powiatu, podregionu, regionu, województwa, makroregionu i Polski, <br />- gminy - suma danych dla gmin o rodzaju 1, 2, 3 (lub suma rodzaj jednostki = 4 i rodzaj jednostki = 5) na poziom powiatu, podregionu, regionu, województwa, makroregionu i Polski, <br />- powiatu - suma danych dla powiatów na poziom podregionu, regionu, województwa, makroregionu i Polski, <br />- podregionu - suma danych dla podregionów na poziom regionu, województwa, makroregionu i Polski, <br />- województwa/regionu - suma danych dla regionów na poziom województwa, makroregionu i Polski, <br />- makroregionu - suma danych dla makroregionów na poziom Polski. <br />"
+  }
+}
