@@ -63,3 +63,32 @@ class YearsAPI(BaseAPIClient):
             Dictionary with endpoint metadata and versioning info.
         """
         return self.fetch_single_result("years/metadata")
+
+    async def alist_years(
+        self,
+        sort: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+    ) -> list[dict[str, Any]]:
+        """
+        Async version of list_years.
+        """
+        params: dict[str, Any] = {}
+        if sort:
+            params["sort"] = sort
+        return await self.afetch_single_result("years", results_key="results", params=params, extra_query=extra_query)
+
+    async def aget_year(
+        self,
+        year_id: int,
+        extra_query: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """
+        Async version of get_year.
+        """
+        return await self.afetch_single_result(f"years/{year_id}", extra_query=extra_query)
+
+    async def aget_years_metadata(self) -> dict[str, Any]:
+        """
+        Async version of get_years_metadata.
+        """
+        return await self.afetch_single_result("years/metadata")

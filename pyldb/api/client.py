@@ -1,6 +1,7 @@
 from collections.abc import Iterator
 from typing import Any
 
+import httpx
 from requests import HTTPError, Response, Session
 from requests_cache import CachedSession
 
@@ -50,7 +51,7 @@ class BaseAPIClient:
                 from urllib.parse import urlparse, urlunparse
 
                 parsed = urlparse(config.proxy_url)
-                auth = f"{config.proxy_username}:{config.proxy_password}"
+                auth = f"{config.proxy_username}:{config.proxy.password}"
                 new_netloc = f"{auth}@{parsed.netloc}"
                 auth_proxy_url = urlunparse(parsed._replace(netloc=new_netloc))
                 proxies = {
@@ -282,6 +283,165 @@ class BaseAPIClient:
             headers=headers,
         )
 
+        if results_key is not None:
+            if isinstance(response, dict) and results_key in response:
+                results = response[results_key]
+                if return_metadata:
+                    metadata = {
+                        k: v for k, v in response.items() if k not in {results_key, "page", "pageSize", "links"}
+                    }
+                    return results, metadata
+                return results
+            else:
+                raise ValueError(f"Response does not contain key '{results_key}'")
+        return response
+
+    async def _amake_request(
+        self,
+        endpoint: str,
+        method: str = "GET",
+        params: dict[str, Any] | None = None,
+        extra_query: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
+    ) -> dict[str, Any]:
+        """
+        Async version of _make_request using httpx.AsyncClient.
+        """
+        url = self._build_url(endpoint)
+        query = params.copy() if params else {}
+        if extra_query:
+            query.update(extra_query)
+        lang = self.config.language.value if hasattr(self.config.language, "value") else self.config.language
+        query.setdefault("lang", lang)
+        req_headers: dict[str, str] = {k: str(v) for k, v in self.session.headers.items()}
+        if headers:
+            req_headers.update(headers)
+        async with httpx.AsyncClient() as client:
+            response = await client.request(method, url, params=query, headers=req_headers)
+        try:
+            response.raise_for_status()
+        except httpx.HTTPStatusError as exc:
+            try:
+                error_detail = response.json()
+            except Exception:
+                error_detail = response.text
+            raise RuntimeError(f"HTTP error {response.status_code}: {error_detail}") from exc
+        data = response.json()
+        if "error" in data:
+            raise ValueError(f"API Error: {data['error']}")
+        return data
+
+    async def _apaginated_request(
+        self,
+        endpoint: str,
+        method: str = "GET",
+        params: dict[str, Any] | None = None,
+        extra_query: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
+        results_key: str = "results",
+        page_size: int = 100,
+        max_pages: int | None = None,
+        return_all: bool = True,
+    ):
+        """
+        Async version of _paginated_request using httpx.AsyncClient.
+        Yields each page's result dictionary.
+        """
+        query = params.copy() if params else {}
+        if extra_query:
+            query.update(extra_query)
+        lang = self.config.language.value if hasattr(self.config.language, "value") else self.config.language
+        query.setdefault("lang", lang)
+        query["page-size"] = page_size
+        fetched = 0
+        next_url = None
+        first = True
+        async with httpx.AsyncClient() as client:
+            while True:
+                if first:
+                    resp = await self._amake_request(endpoint, method=method, params=query, headers=headers)
+                    first = False
+                else:
+                    if not next_url:
+                        break
+                    response = await client.request(method, next_url, headers=self.session.headers)
+                    try:
+                        response.raise_for_status()
+                    except httpx.HTTPStatusError as exc:
+                        try:
+                            error_detail = response.json()
+                        except Exception:
+                            error_detail = response.text
+                        raise RuntimeError(f"HTTP error {response.status_code}: {error_detail}") from exc
+                    resp = response.json()
+                if results_key not in resp or not resp[results_key]:
+                    break
+                yield resp
+                fetched += 1
+                if not return_all or (max_pages and fetched >= max_pages):
+                    break
+                links = resp.get("links", {})
+                next_url = links.get("next")
+                if "next" not in links:
+                    break
+
+    async def afetch_all_results(
+        self,
+        endpoint: str,
+        method: str = "GET",
+        params: dict[str, Any] | None = None,
+        extra_query: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
+        results_key: str = "results",
+        page_size: int = 100,
+        max_pages: int | None = None,
+        return_metadata: bool = False,
+    ) -> list[dict[str, Any]] | tuple[list[dict[str, Any]], dict[str, Any]]:
+        """
+        Async version of fetch_all_results.
+        """
+        all_results = []
+        metadata: dict[str, Any] = {}
+        first_page = True
+        async for page in self._apaginated_request(
+            endpoint,
+            method=method,
+            params=params,
+            extra_query=extra_query,
+            headers=headers,
+            results_key=results_key,
+            page_size=page_size,
+            max_pages=max_pages,
+            return_all=True,
+        ):
+            if first_page and return_metadata:
+                metadata = {k: v for k, v in page.items() if k not in {results_key, "page", "pageSize", "links"}}
+                first_page = False
+            all_results.extend(page.get(results_key, []))
+        if return_metadata:
+            return all_results, metadata
+        return all_results
+
+    async def afetch_single_result(
+        self,
+        endpoint: str,
+        results_key: str | None = None,
+        method: str = "GET",
+        params: dict[str, Any] | None = None,
+        extra_query: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
+        return_metadata: bool = False,
+    ) -> dict[str, Any] | list[dict[str, Any]] | tuple[list[dict[str, Any]], dict[str, Any]]:
+        """
+        Async version of fetch_single_result.
+        """
+        response = await self._amake_request(
+            endpoint=endpoint,
+            method=method,
+            params=params,
+            extra_query=extra_query,
+            headers=headers,
+        )
         if results_key is not None:
             if isinstance(response, dict) and results_key in response:
                 results = response[results_key]

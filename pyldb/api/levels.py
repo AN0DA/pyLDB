@@ -63,3 +63,32 @@ class LevelsAPI(BaseAPIClient):
             Dictionary with API metadata and versioning info.
         """
         return self.fetch_single_result("levels/metadata")
+
+    async def alist_levels(
+        self,
+        sort: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+    ) -> list[dict[str, Any]]:
+        """
+        Async version of list_levels.
+        """
+        params: dict[str, Any] = {}
+        if sort:
+            params["sort"] = sort
+        return await self.afetch_single_result("levels", results_key="results", params=params, extra_query=extra_query)
+
+    async def aget_level(
+        self,
+        level_id: int,
+        extra_query: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """
+        Async version of get_level.
+        """
+        return await self.afetch_single_result(f"levels/{level_id}", extra_query=extra_query)
+
+    async def aget_levels_metadata(self) -> dict[str, Any]:
+        """
+        Async version of get_levels_metadata.
+        """
+        return await self.afetch_single_result("levels/metadata")

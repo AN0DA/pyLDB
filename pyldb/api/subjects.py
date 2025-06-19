@@ -112,3 +112,67 @@ class SubjectsAPI(BaseAPIClient):
             Dictionary with endpoint metadata and versioning info.
         """
         return self.fetch_single_result("subjects/metadata")
+
+    async def alist_subjects(
+        self,
+        parent_id: str | None = None,
+        sort: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+    ) -> list[dict[str, Any]]:
+        """
+        Async version of list_subjects.
+        """
+        params: dict[str, Any] = {}
+        if parent_id:
+            params["parent-id"] = parent_id
+        if sort:
+            params["sort"] = sort
+        if all_pages:
+            return await self.afetch_all_results(
+                "subjects",
+                params=params,
+                extra_query=extra_query,
+                page_size=page_size,
+                max_pages=max_pages,
+                results_key="results",
+            )
+        else:
+            return await self.afetch_single_result("subjects", results_key="results", params=params, extra_query=extra_query)
+
+    async def aget_subject(
+        self,
+        subject_id: str,
+    ) -> dict[str, Any]:
+        """
+        Async version of get_subject.
+        """
+        return await self.afetch_single_result(f"subjects/{subject_id}")
+
+    async def asearch_subjects(
+        self,
+        name: str,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        extra_query: dict[str, Any] | None = None,
+    ) -> list[dict[str, Any]]:
+        """
+        Async version of search_subjects.
+        """
+        params = {"name": name}
+        return await self.afetch_all_results(
+            "subjects/search",
+            params=params,
+            extra_query=extra_query,
+            page_size=page_size,
+            max_pages=max_pages,
+            results_key="results",
+        )
+
+    async def aget_subjects_metadata(self) -> dict[str, Any]:
+        """
+        Async version of get_subjects_metadata.
+        """
+        return await self.afetch_single_result("subjects/metadata")

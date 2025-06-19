@@ -267,3 +267,175 @@ class UnitsAPI(BaseAPIClient):
             Dictionary with endpoint metadata and versioning info.
         """
         return self.fetch_single_result("units/metadata")
+
+    async def alist_units(
+        self,
+        level: int | None = None,
+        parent_id: str | None = None,
+        name: str | None = None,
+        sort: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+    ) -> list[dict[str, Any]]:
+        """
+        Async version of list_units.
+        """
+        params: dict[str, Any] = {}
+        if level is not None:
+            params["level"] = level
+        if parent_id:
+            params["parent-id"] = parent_id
+        if name:
+            params["name"] = name
+        if sort:
+            params["sort"] = sort
+        if all_pages:
+            return await self.afetch_all_results(
+                "units",
+                params=params,
+                extra_query=extra_query,
+                page_size=page_size,
+                max_pages=max_pages,
+                results_key="results",
+            )
+        else:
+            return await self.afetch_single_result("units", results_key="results", params=params, extra_query=extra_query)
+
+    async def aget_unit(
+        self,
+        unit_id: str,
+        extra_query: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """
+        Async version of get_unit.
+        """
+        return await self.afetch_single_result(f"units/{unit_id}", extra_query=extra_query)
+
+    async def asearch_units(
+        self,
+        name: str | None = None,
+        level: int | None = None,
+        parent_id: str | None = None,
+        sort: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+    ) -> list[dict[str, Any]]:
+        """
+        Async version of search_units.
+        """
+        params: dict[str, Any] = {}
+        if name:
+            params["name"] = name
+        if level is not None:
+            params["level"] = level
+        if parent_id:
+            params["parent-id"] = parent_id
+        if sort:
+            params["sort"] = sort
+        if all_pages:
+            return await self.afetch_all_results(
+                "units/search",
+                params=params,
+                extra_query=extra_query,
+                page_size=page_size,
+                max_pages=max_pages,
+                results_key="results",
+            )
+        else:
+            return await self.afetch_single_result(
+                "units/search", results_key="results", params=params, extra_query=extra_query
+            )
+
+    async def alist_localities(
+        self,
+        name: str | None = None,
+        level: int | None = None,
+        parent_id: str | None = None,
+        sort: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+    ) -> list[dict[str, Any]]:
+        """
+        Async version of list_localities.
+        """
+        params: dict[str, Any] = {}
+        if name:
+            params["name"] = name
+        if level is not None:
+            params["level"] = level
+        if parent_id:
+            params["parent-id"] = parent_id
+        if sort:
+            params["sort"] = sort
+        if all_pages:
+            return await self.afetch_all_results(
+                "units/localities",
+                params=params,
+                extra_query=extra_query,
+                page_size=page_size,
+                max_pages=max_pages,
+                results_key="results",
+            )
+        else:
+            return await self.afetch_single_result(
+                "units/localities", results_key="results", params=params, extra_query=extra_query
+            )
+
+    async def aget_locality(
+        self,
+        locality_id: str,
+        extra_query: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """
+        Async version of get_locality.
+        """
+        return await self.afetch_single_result(f"units/localities/{locality_id}", extra_query=extra_query)
+
+    async def asearch_localities(
+        self,
+        name: str | None = None,
+        level: int | None = None,
+        parent_id: str | None = None,
+        sort: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+    ) -> list[dict[str, Any]]:
+        """
+        Async version of search_localities.
+        """
+        params: dict[str, Any] = {}
+        if name:
+            params["name"] = name
+        if level is not None:
+            params["level"] = level
+        if parent_id:
+            params["parent-id"] = parent_id
+        if sort:
+            params["sort"] = sort
+        if all_pages:
+            return await self.afetch_all_results(
+                "units/localities/search",
+                params=params,
+                extra_query=extra_query,
+                page_size=page_size,
+                max_pages=max_pages,
+                results_key="results",
+            )
+        else:
+            return await self.afetch_single_result(
+                "units/localities/search", results_key="results", params=params, extra_query=extra_query
+            )
+
+    async def aget_units_metadata(self) -> dict[str, Any]:
+        """
+        Async version of get_units_metadata.
+        """
+        return await self.afetch_single_result("units/metadata")

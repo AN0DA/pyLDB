@@ -61,3 +61,28 @@ class AggregatesAPI(BaseAPIClient):
             List of aggregate metadata dictionaries.
         """
         return self.fetch_single_result("aggregates/metadata")
+
+    async def alist_aggregates(
+        self,
+        sort: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+    ) -> list[dict[str, Any]]:
+        """
+        Async version of list_aggregates.
+        """
+        params: dict[str, Any] = {}
+        if sort:
+            params["sort"] = sort
+        return await self.afetch_single_result("aggregates", results_key="results", params=params, extra_query=extra_query)
+
+    async def aget_aggregate(self, aggregate_id: str) -> dict[str, Any]:
+        """
+        Async version of get_aggregate.
+        """
+        return await self.afetch_single_result(f"aggregates/{aggregate_id}")
+
+    async def aget_aggregates_metadata(self) -> dict[str, Any]:
+        """
+        Async version of get_aggregates_metadata.
+        """
+        return await self.afetch_single_result("aggregates/metadata")

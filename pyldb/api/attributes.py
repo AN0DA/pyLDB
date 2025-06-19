@@ -47,3 +47,21 @@ class AttributesAPI(BaseAPIClient):
             Dictionary with API metadata and versioning info.
         """
         return self.fetch_single_result("attributes/metadata")
+
+    async def alist_attributes(self) -> list[dict[str, Any]]:
+        """
+        Async version of list_attributes.
+        """
+        return await self.afetch_single_result("attributes", results_key="results")
+
+    async def aget_attribute(self, attribute_id: str) -> dict[str, Any]:
+        """
+        Async version of get_attribute.
+        """
+        return await self.afetch_single_result(f"attributes/{attribute_id}")
+
+    async def aget_attributes_metadata(self) -> dict[str, Any]:
+        """
+        Async version of get_attributes_metadata.
+        """
+        return await self.afetch_single_result("attributes/metadata")

@@ -63,3 +63,32 @@ class MeasuresAPI(BaseAPIClient):
             Dictionary with endpoint metadata and versioning info.
         """
         return self.fetch_single_result("measures/metadata")
+
+    async def alist_measures(
+        self,
+        sort: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+    ) -> list[dict[str, Any]]:
+        """
+        Async version of list_measures.
+        """
+        params: dict[str, Any] = {}
+        if sort:
+            params["sort"] = sort
+        return await self.afetch_single_result("measures", results_key="results", params=params, extra_query=extra_query)
+
+    async def aget_measure(
+        self,
+        measure_id: int,
+        extra_query: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """
+        Async version of get_measure.
+        """
+        return await self.afetch_single_result(f"measures/{measure_id}", extra_query=extra_query)
+
+    async def aget_measures_metadata(self) -> dict[str, Any]:
+        """
+        Async version of get_measures_metadata.
+        """
+        return await self.afetch_single_result("measures/metadata")

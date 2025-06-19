@@ -144,3 +144,91 @@ class VariablesAPI(BaseAPIClient):
             Dictionary with endpoint metadata and versioning info.
         """
         return self.fetch_single_result("variables/metadata")
+
+    async def alist_variables(
+        self,
+        category_id: str | None = None,
+        aggregate_id: str | None = None,
+        name: str | None = None,
+        sort: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+    ) -> list[dict[str, Any]]:
+        """
+        Async version of list_variables.
+        """
+        params: dict[str, Any] = {}
+        if category_id:
+            params["category-id"] = category_id
+        if aggregate_id:
+            params["aggregate-id"] = aggregate_id
+        if name:
+            params["name"] = name
+        if sort:
+            params["sort"] = sort
+        if all_pages:
+            return await self.afetch_all_results(
+                "variables",
+                params=params,
+                extra_query=extra_query,
+                page_size=page_size,
+                max_pages=max_pages,
+                results_key="results",
+            )
+        else:
+            return await self.afetch_single_result("variables", results_key="results", params=params, extra_query=extra_query)
+
+    async def aget_variable(
+        self,
+        variable_id: str,
+        extra_query: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """
+        Async version of get_variable.
+        """
+        return await self.afetch_single_result(f"variables/{variable_id}", extra_query=extra_query)
+
+    async def asearch_variables(
+        self,
+        name: str | None = None,
+        category_id: str | None = None,
+        aggregate_id: str | None = None,
+        sort: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+    ) -> list[dict[str, Any]]:
+        """
+        Async version of search_variables.
+        """
+        params: dict[str, Any] = {}
+        if name:
+            params["name"] = name
+        if category_id:
+            params["category-id"] = category_id
+        if aggregate_id:
+            params["aggregate-id"] = aggregate_id
+        if sort:
+            params["sort"] = sort
+        if all_pages:
+            return await self.afetch_all_results(
+                "variables/search",
+                params=params,
+                extra_query=extra_query,
+                page_size=page_size,
+                max_pages=max_pages,
+                results_key="results",
+            )
+        else:
+            return await self.afetch_single_result(
+                "variables/search", results_key="results", params=params, extra_query=extra_query
+            )
+
+    async def aget_variables_metadata(self) -> dict[str, Any]:
+        """
+        Async version of get_variables_metadata.
+        """
+        return await self.afetch_single_result("variables/metadata")

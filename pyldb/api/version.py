@@ -20,3 +20,9 @@ class VersionAPI(BaseAPIClient):
             Dictionary with version and build information.
         """
         return self.fetch_single_result("version")
+
+    async def aget_version(self) -> dict[str, Any]:
+        """
+        Async version of get_version.
+        """
+        return await self.afetch_single_result("version")
