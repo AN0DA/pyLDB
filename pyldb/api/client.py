@@ -1,11 +1,13 @@
 from collections.abc import Iterator
 from typing import Any
 
+from pyldb.api.utils.rate_limiter import AsyncRateLimiter, PersistentQuotaCache, RateLimiter
+
 import httpx
 from requests import HTTPError, Response, Session
 from requests_cache import CachedSession
 
-from pyldb.config import LDB_API_BASE_URL, LDBConfig
+from pyldb.config import DEFAULT_QUOTAS, LDB_API_BASE_URL, LDBConfig
 
 
 class BaseAPIClient:
@@ -21,6 +23,10 @@ class BaseAPIClient:
     The client supports HTTP/HTTPS proxy configuration through the LDBConfig settings.
     Proxy authentication is supported by providing proxy_username and proxy_password.
     """
+
+    _global_sync_limiter = None
+    _global_async_limiter = None
+    _quota_cache = None
 
     def __init__(self, config: LDBConfig, extra_headers: dict[str, str] | None = None):
         """
@@ -70,6 +76,23 @@ class BaseAPIClient:
         if extra_headers:
             self.session.headers.update(extra_headers)
 
+        # Determine quotas
+        quotas = getattr(config, "quotas", None)
+        if quotas is None:
+            # Use default quotas based on registration
+            is_registered = bool(getattr(config, "api_key", None))
+            quotas = {k: v[1] if is_registered else v[0] for k, v in DEFAULT_QUOTAS.items()}
+        # Quota cache
+        if BaseAPIClient._quota_cache is None:
+            BaseAPIClient._quota_cache = PersistentQuotaCache(getattr(config, "quota_cache_enabled", True))
+        # Set global limiters if not set
+        if BaseAPIClient._global_sync_limiter is None:
+            BaseAPIClient._global_sync_limiter = RateLimiter(quotas, is_registered, BaseAPIClient._quota_cache)
+        if BaseAPIClient._global_async_limiter is None:
+            BaseAPIClient._global_async_limiter = AsyncRateLimiter(quotas, is_registered, BaseAPIClient._quota_cache)
+        self._sync_limiter = BaseAPIClient._global_sync_limiter
+        self._async_limiter = BaseAPIClient._global_async_limiter
+
     def _build_url(self, endpoint: str) -> str:
         """Build full API URL."""
         endpoint = endpoint.strip("/")
@@ -116,6 +139,7 @@ class BaseAPIClient:
             requests.exceptions.RequestException: If request fails
             ValueError: If response contains error
         """
+        self._sync_limiter.acquire()
         url = self._build_url(endpoint)
         query = params.copy() if params else {}
         if extra_query:
@@ -307,6 +331,7 @@ class BaseAPIClient:
         """
         Async version of _make_request using httpx.AsyncClient.
         """
+        await self._async_limiter.acquire()
         url = self._build_url(endpoint)
         query = params.copy() if params else {}
         if extra_query:
