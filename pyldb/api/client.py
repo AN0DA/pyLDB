@@ -6,6 +6,7 @@ from pyldb.api.utils.rate_limiter import AsyncRateLimiter, PersistentQuotaCache,
 import httpx
 from requests import HTTPError, Response, Session
 from requests_cache import CachedSession
+from tqdm import tqdm
 
 from pyldb.config import DEFAULT_QUOTAS, LDB_API_BASE_URL, LDBConfig
 
@@ -18,10 +19,15 @@ class BaseAPIClient:
     - Request caching
     - Proxy configuration
     - Response handling
-    - Pagination
+    - Pagination with optional progress bars
 
     The client supports HTTP/HTTPS proxy configuration through the LDBConfig settings.
     Proxy authentication is supported by providing proxy_username and proxy_password.
+    
+    Progress bars can be displayed during paginated requests using the show_progress
+    parameter in fetch_all_results() and afetch_all_results() methods. Progress bars
+    show the number of pages fetched, current item count, and estimated total when
+    available from the API response.
     """
 
     _global_sync_limiter = None
@@ -57,7 +63,7 @@ class BaseAPIClient:
                 from urllib.parse import urlparse, urlunparse
 
                 parsed = urlparse(config.proxy_url)
-                auth = f"{config.proxy_username}:{config.proxy.password}"
+                auth = f"{config.proxy_username}:{config.proxy_password}"
                 new_netloc = f"{auth}@{parsed.netloc}"
                 auth_proxy_url = urlunparse(parsed._replace(netloc=new_netloc))
                 proxies = {
@@ -233,6 +239,7 @@ class BaseAPIClient:
         page_size: int = 100,
         max_pages: int | None = None,
         return_metadata: bool = False,
+        show_progress: bool = True,
     ) -> list[dict[str, Any]] | tuple[list[dict[str, Any]], dict[str, Any]]:
         """
         Convenience method to fetch and combine all paginated results.
@@ -247,6 +254,7 @@ class BaseAPIClient:
             page_size: Number of items per page
             max_pages: Max pages to fetch (None = all)
             return_metadata: If True, also return metadata dict (see docstring).
+            show_progress: If True, show a progress bar during fetching.
 
         Returns:
             List of all results across pages, or (results, metadata) tuple if return_metadata is True.
@@ -254,22 +262,49 @@ class BaseAPIClient:
         all_results = []
         metadata: dict[str, Any] = {}
         first_page = True
-        for page in self._paginated_request(
-            endpoint,
-            method=method,
-            params=params,
-            extra_query=extra_query,
-            headers=headers,
-            results_key=results_key,
-            page_size=page_size,
-            max_pages=max_pages,
-            return_all=True,
-        ):
-            if first_page and return_metadata:
-                # Collect metadata from the first page
-                metadata = {k: v for k, v in page.items() if k not in {results_key, "page", "pageSize", "links"}}
-                first_page = False
-            all_results.extend(page.get(results_key, []))
+        
+        # Create progress bar if requested
+        progress_bar = None
+        if show_progress:
+            progress_bar = tqdm(
+                desc=f"Fetching {endpoint.split('/')[-1]}",
+                unit="pages",
+                leave=True
+            )
+        
+        try:
+            for page in self._paginated_request(
+                endpoint,
+                method=method,
+                params=params,
+                extra_query=extra_query,
+                headers=headers,
+                results_key=results_key,
+                page_size=page_size,
+                max_pages=max_pages,
+                return_all=True,
+            ):
+                if first_page and return_metadata:
+                    # Collect metadata from the first page
+                    metadata = {k: v for k, v in page.items() if k not in {results_key, "page", "pageSize", "links"}}
+                    # Try to get total count for progress bar
+                    if show_progress and progress_bar is not None and "totalCount" in page:
+                        total_pages = (page["totalCount"] + page_size - 1) // page_size
+                        progress_bar.total = total_pages
+                    first_page = False
+                
+                all_results.extend(page.get(results_key, []))
+                
+                if show_progress and progress_bar is not None:
+                    progress_bar.update(1)
+                    progress_bar.set_postfix({
+                        "items": len(all_results),
+                        "current_page": len(all_results) // page_size + (1 if len(all_results) % page_size else 0)
+                    })
+        finally:
+            if show_progress and progress_bar is not None:
+                progress_bar.close()
+        
         if return_metadata:
             return all_results, metadata
         return all_results
@@ -421,28 +456,71 @@ class BaseAPIClient:
         page_size: int = 100,
         max_pages: int | None = None,
         return_metadata: bool = False,
+        show_progress: bool = True,
     ) -> list[dict[str, Any]] | tuple[list[dict[str, Any]], dict[str, Any]]:
         """
         Async version of fetch_all_results.
+
+        Args:
+            endpoint: API endpoint
+            method: HTTP method (default: GET)
+            params: Query parameters (e.g., year, lang, page, page-size, etc.)
+            extra_query: Additional query parameters to merge in.
+            headers: Optional request headers.
+            results_key: Key to extract results array from response
+            page_size: Number of items per page
+            max_pages: Max pages to fetch (None = all)
+            return_metadata: If True, also return metadata dict (see docstring).
+            show_progress: If True, show a progress bar during fetching.
+
+        Returns:
+            List of all results across pages, or (results, metadata) tuple if return_metadata is True.
         """
         all_results = []
         metadata: dict[str, Any] = {}
         first_page = True
-        async for page in self._apaginated_request(
-            endpoint,
-            method=method,
-            params=params,
-            extra_query=extra_query,
-            headers=headers,
-            results_key=results_key,
-            page_size=page_size,
-            max_pages=max_pages,
-            return_all=True,
-        ):
-            if first_page and return_metadata:
-                metadata = {k: v for k, v in page.items() if k not in {results_key, "page", "pageSize", "links"}}
-                first_page = False
-            all_results.extend(page.get(results_key, []))
+        
+        # Create progress bar if requested
+        progress_bar = None
+        if show_progress:
+            progress_bar = tqdm(
+                desc=f"Fetching {endpoint.split('/')[-1]} (async)",
+                unit="pages",
+                leave=True
+            )
+        
+        try:
+            async for page in self._apaginated_request(
+                endpoint,
+                method=method,
+                params=params,
+                extra_query=extra_query,
+                headers=headers,
+                results_key=results_key,
+                page_size=page_size,
+                max_pages=max_pages,
+                return_all=True,
+            ):
+                if first_page and return_metadata:
+                    metadata = {k: v for k, v in page.items() if k not in {results_key, "page", "pageSize", "links"}}
+                    # Try to get total count for progress bar
+                    if show_progress and progress_bar is not None and "totalCount" in page:
+                        total_pages = (page["totalCount"] + page_size - 1) // page_size
+                        progress_bar.total = total_pages
+                    first_page = False
+                
+                all_results.extend(page.get(results_key, []))
+                
+                if show_progress and progress_bar is not None:
+                    progress_bar.update(1)
+                    progress_bar.set_postfix({
+                        "items": len(all_results),
+                        "current_page": len(all_results) // page_size + (1 if len(all_results) % page_size else 0)
+                    })
+        finally:
+            if show_progress and progress_bar is not None:
+                progress_bar.close()
+        
         if return_metadata:
             return all_results, metadata
         return all_results

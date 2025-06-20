@@ -1,10 +1,11 @@
 import asyncio
 import json
+import os
 import threading
 import time
 from collections import deque
 
-from pyldb.utils.cache import get_default_cache_path
+from pyldb.utils.cache import get_cache_file_path
 
 try:
     from platformdirs import user_cache_dir
@@ -15,7 +16,7 @@ except ImportError:
 class PersistentQuotaCache:
     def __init__(self, enabled: bool = True):
         self.enabled = enabled
-        self.cache_file = get_default_cache_path()
+        self.cache_file = get_cache_file_path("quota_cache.json")
         self._lock = threading.Lock()
         self._data = None
         if self.enabled:
