@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Literal, overload
 
 from pyldb.api.client import BaseAPIClient
 
@@ -15,6 +15,36 @@ class DataAPI(BaseAPIClient):
     enabling users to fetch statistical data by variable, unit, and locality.
     """
 
+    @overload
+    def get_data_by_variable(
+        self,
+        variable_id: str,
+        year: int | None = None,
+        unit_level: int | None = None,
+        parent_id: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        format: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+        return_metadata: Literal[True] = True,
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]]: ...
+
+    @overload
+    def get_data_by_variable(
+        self,
+        variable_id: str,
+        year: int | None = None,
+        unit_level: int | None = None,
+        parent_id: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        format: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+        return_metadata: Literal[False] = False,
+    ) -> list[dict[str, Any]]: ...
+
     def get_data_by_variable(
         self,
         variable_id: str,
@@ -27,7 +57,7 @@ class DataAPI(BaseAPIClient):
         extra_query: dict[str, Any] | None = None,
         all_pages: bool = True,
         return_metadata: bool = True,
-    ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]:
         """
         Retrieve statistical data for a specific variable.
 
@@ -57,25 +87,68 @@ class DataAPI(BaseAPIClient):
             params["parent-id"] = parent_id
         if format:
             params["format"] = format
+        if extra_query:
+            params.update(extra_query)
+        endpoint = f"data/by-variable/{variable_id}"
 
+        result: tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]
         if all_pages:
-            return self.fetch_all_results(
-                f"data/by-variable/{variable_id}",
-                params=params,
-                extra_query=extra_query,
-                page_size=page_size,
-                max_pages=max_pages,
-                results_key="results",
-                return_metadata=return_metadata,
-            )
+            if return_metadata:
+                result = self.fetch_all_results(
+                    endpoint,
+                    params=params,
+                    page_size=page_size,
+                    max_pages=max_pages,
+                    results_key="results",
+                    return_metadata=True,
+                )
+            else:
+                result = self.fetch_all_results(
+                    endpoint,
+                    params=params,
+                    page_size=page_size,
+                    max_pages=max_pages,
+                    results_key="results",
+                    return_metadata=False,
+                )
         else:
-            return self.fetch_single_result(
-                f"data/by-variable/{variable_id}",
-                results_key="results",
-                params=params,
-                extra_query=extra_query,
-                return_metadata=return_metadata,
-            )
+            if return_metadata:
+                result = self.fetch_single_result(
+                    endpoint,
+                    results_key="results",
+                    params=params,
+                    return_metadata=True,
+                )
+            else:
+                result = self.fetch_single_result(
+                    endpoint,
+                    results_key="results",
+                    params=params,
+                    return_metadata=False,
+                )
+        return result
+
+    @overload
+    def get_data_by_unit(
+        self,
+        unit_id: str,
+        variable: str,
+        year: int | None = None,
+        format: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+        return_metadata: Literal[True] = True,
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]]: ...
+
+    @overload
+    def get_data_by_unit(
+        self,
+        unit_id: str,
+        variable: str,
+        year: int | None = None,
+        format: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+        return_metadata: Literal[False] = False,
+    ) -> list[dict[str, Any]]: ...
 
     def get_data_by_unit(
         self,
@@ -85,7 +158,7 @@ class DataAPI(BaseAPIClient):
         format: str | None = None,
         extra_query: dict[str, Any] | None = None,
         return_metadata: bool = True,
-    ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]:
         """
         Retrieve statistical data for a specific administrative unit.
 
@@ -107,14 +180,54 @@ class DataAPI(BaseAPIClient):
             params["year"] = year
         if format:
             params["format"] = format
+        if extra_query:
+            params.update(extra_query)
+        endpoint = f"data/by-unit/{unit_id}"
 
-        return self.fetch_single_result(
-            f"data/by-unit/{unit_id}",
-            results_key="results",
-            params=params,
-            extra_query=extra_query,
-            return_metadata=return_metadata,
-        )
+        result: tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]
+        if return_metadata:
+            result = self.fetch_single_result(
+                endpoint,
+                results_key="results",
+                params=params,
+                return_metadata=True,
+            )
+        else:
+            result = self.fetch_single_result(
+                endpoint,
+                results_key="results",
+                params=params,
+                return_metadata=False,
+            )
+        return result
+
+    @overload
+    def get_data_by_variable_locality(
+        self,
+        variable_id: str,
+        locality_id: str,
+        year: int | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        format: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+        return_metadata: Literal[True] = True,
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]]: ...
+
+    @overload
+    def get_data_by_variable_locality(
+        self,
+        variable_id: str,
+        locality_id: str,
+        year: int | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        format: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+        return_metadata: Literal[False] = False,
+    ) -> list[dict[str, Any]]: ...
 
     def get_data_by_variable_locality(
         self,
@@ -127,7 +240,7 @@ class DataAPI(BaseAPIClient):
         extra_query: dict[str, Any] | None = None,
         all_pages: bool = True,
         return_metadata: bool = True,
-    ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]:
         """
         Retrieve data for a variable within a specific locality.
 
@@ -152,27 +265,74 @@ class DataAPI(BaseAPIClient):
             params["year"] = year
         if format:
             params["format"] = format
-
+        if extra_query:
+            params.update(extra_query)
         endpoint = f"data/by-variable/{variable_id}/locality/{locality_id}"
 
+        result: tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]
         if all_pages:
-            return self.fetch_all_results(
-                endpoint,
-                params=params,
-                extra_query=extra_query,
-                page_size=page_size,
-                max_pages=max_pages,
-                results_key="results",
-                return_metadata=return_metadata,
-            )
+            if return_metadata:
+                result = self.fetch_all_results(
+                    endpoint,
+                    params=params,
+                    page_size=page_size,
+                    max_pages=max_pages,
+                    results_key="results",
+                    return_metadata=True,
+                )
+            else:
+                result = self.fetch_all_results(
+                    endpoint,
+                    params=params,
+                    page_size=page_size,
+                    max_pages=max_pages,
+                    results_key="results",
+                    return_metadata=False,
+                )
         else:
-            return self.fetch_single_result(
-                endpoint,
-                results_key="results",
-                params=params,
-                extra_query=extra_query,
-                return_metadata=return_metadata,
-            )
+            if return_metadata:
+                result = self.fetch_single_result(
+                    endpoint,
+                    results_key="results",
+                    params=params,
+                    return_metadata=True,
+                )
+            else:
+                result = self.fetch_single_result(
+                    endpoint,
+                    results_key="results",
+                    params=params,
+                    return_metadata=False,
+                )
+        return result
+
+    @overload
+    def get_data_by_unit_locality(
+        self,
+        unit_id: str,
+        variable_id: str | None = None,
+        year: int | None = None,
+        format: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+        return_metadata: Literal[True] = True,
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]]: ...
+
+    @overload
+    def get_data_by_unit_locality(
+        self,
+        unit_id: str,
+        variable_id: str | None = None,
+        year: int | None = None,
+        format: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+        return_metadata: Literal[False] = False,
+    ) -> list[dict[str, Any]]: ...
 
     def get_data_by_unit_locality(
         self,
@@ -185,7 +345,7 @@ class DataAPI(BaseAPIClient):
         extra_query: dict[str, Any] | None = None,
         all_pages: bool = True,
         return_metadata: bool = True,
-    ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]:
         """
         Retrieve data for a single statistical locality by unit.
 
@@ -212,27 +372,46 @@ class DataAPI(BaseAPIClient):
             params["year"] = year
         if format:
             params["format"] = format
-
+        if extra_query:
+            params.update(extra_query)
         endpoint = f"data/localities/by-unit/{unit_id}"
 
+        result: tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]
         if all_pages:
-            return self.fetch_all_results(
-                endpoint,
-                params=params,
-                extra_query=extra_query,
-                page_size=page_size,
-                max_pages=max_pages,
-                results_key="results",
-                return_metadata=return_metadata,
-            )
+            if return_metadata:
+                result = self.fetch_all_results(
+                    endpoint,
+                    params=params,
+                    page_size=page_size,
+                    max_pages=max_pages,
+                    results_key="results",
+                    return_metadata=True,
+                )
+            else:
+                result = self.fetch_all_results(
+                    endpoint,
+                    params=params,
+                    page_size=page_size,
+                    max_pages=max_pages,
+                    results_key="results",
+                    return_metadata=False,
+                )
         else:
-            return self.fetch_single_result(
-                endpoint,
-                results_key="results",
-                params=params,
-                extra_query=extra_query,
-                return_metadata=return_metadata,
-            )
+            if return_metadata:
+                result = self.fetch_single_result(
+                    endpoint,
+                    results_key="results",
+                    params=params,
+                    return_metadata=True,
+                )
+            else:
+                result = self.fetch_single_result(
+                    endpoint,
+                    results_key="results",
+                    params=params,
+                    return_metadata=False,
+                )
+        return result
 
     def get_data_metadata(self) -> dict[str, Any]:
         """
@@ -244,6 +423,37 @@ class DataAPI(BaseAPIClient):
             dict: Metadata describing the /data resource, fields, and parameters.
         """
         return self.fetch_single_result("data/metadata")
+
+    # ASYNC VERSIONS
+    @overload
+    async def aget_data_by_variable(
+        self,
+        variable_id: str,
+        year: int | None = None,
+        unit_level: int | None = None,
+        parent_id: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        format: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+        return_metadata: Literal[True] = True,
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]]: ...
+
+    @overload
+    async def aget_data_by_variable(
+        self,
+        variable_id: str,
+        year: int | None = None,
+        unit_level: int | None = None,
+        parent_id: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        format: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+        return_metadata: Literal[False] = False,
+    ) -> list[dict[str, Any]]: ...
 
     async def aget_data_by_variable(
         self,
@@ -257,7 +467,7 @@ class DataAPI(BaseAPIClient):
         extra_query: dict[str, Any] | None = None,
         all_pages: bool = True,
         return_metadata: bool = True,
-    ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]:
         """
         Async version of get_data_by_variable.
         """
@@ -270,24 +480,68 @@ class DataAPI(BaseAPIClient):
             params["parent-id"] = parent_id
         if format:
             params["format"] = format
+        if extra_query:
+            params.update(extra_query)
+        endpoint = f"data/by-variable/{variable_id}"
+
+        result: tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]
         if all_pages:
-            return await self.afetch_all_results(
-                f"data/by-variable/{variable_id}",
-                params=params,
-                extra_query=extra_query,
-                page_size=page_size,
-                max_pages=max_pages,
-                results_key="results",
-                return_metadata=return_metadata,
-            )
+            if return_metadata:
+                result = await self.afetch_all_results(
+                    endpoint,
+                    params=params,
+                    page_size=page_size,
+                    max_pages=max_pages,
+                    results_key="results",
+                    return_metadata=True,
+                )
+            else:
+                result = await self.afetch_all_results(
+                    endpoint,
+                    params=params,
+                    page_size=page_size,
+                    max_pages=max_pages,
+                    results_key="results",
+                    return_metadata=False,
+                )
         else:
-            return await self.afetch_single_result(
-                f"data/by-variable/{variable_id}",
-                results_key="results",
-                params=params,
-                extra_query=extra_query,
-                return_metadata=return_metadata,
-            )
+            if return_metadata:
+                result = await self.afetch_single_result(
+                    endpoint,
+                    results_key="results",
+                    params=params,
+                    return_metadata=True,
+                )
+            else:
+                result = await self.afetch_single_result(
+                    endpoint,
+                    results_key="results",
+                    params=params,
+                    return_metadata=False,
+                )
+        return result
+
+    @overload
+    async def aget_data_by_unit(
+        self,
+        unit_id: str,
+        variable: str,
+        year: int | None = None,
+        format: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+        return_metadata: Literal[True] = True,
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]]: ...
+
+    @overload
+    async def aget_data_by_unit(
+        self,
+        unit_id: str,
+        variable: str,
+        year: int | None = None,
+        format: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+        return_metadata: Literal[False] = False,
+    ) -> list[dict[str, Any]]: ...
 
     async def aget_data_by_unit(
         self,
@@ -297,7 +551,7 @@ class DataAPI(BaseAPIClient):
         format: str | None = None,
         extra_query: dict[str, Any] | None = None,
         return_metadata: bool = True,
-    ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]:
         """
         Async version of get_data_by_unit.
         """
@@ -306,13 +560,54 @@ class DataAPI(BaseAPIClient):
             params["year"] = year
         if format:
             params["format"] = format
-        return await self.afetch_single_result(
-            f"data/by-unit/{unit_id}",
-            results_key="results",
-            params=params,
-            extra_query=extra_query,
-            return_metadata=return_metadata,
-        )
+        if extra_query:
+            params.update(extra_query)
+        endpoint = f"data/by-unit/{unit_id}"
+
+        result: tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]
+        if return_metadata:
+            result = await self.afetch_single_result(
+                endpoint,
+                results_key="results",
+                params=params,
+                return_metadata=True,
+            )
+        else:
+            result = await self.afetch_single_result(
+                endpoint,
+                results_key="results",
+                params=params,
+                return_metadata=False,
+            )
+        return result
+
+    @overload
+    async def aget_data_by_variable_locality(
+        self,
+        variable_id: str,
+        locality_id: str,
+        year: int | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        format: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+        return_metadata: Literal[True] = True,
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]]: ...
+
+    @overload
+    async def aget_data_by_variable_locality(
+        self,
+        variable_id: str,
+        locality_id: str,
+        year: int | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        format: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+        return_metadata: Literal[False] = False,
+    ) -> list[dict[str, Any]]: ...
 
     async def aget_data_by_variable_locality(
         self,
@@ -325,7 +620,7 @@ class DataAPI(BaseAPIClient):
         extra_query: dict[str, Any] | None = None,
         all_pages: bool = True,
         return_metadata: bool = True,
-    ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]:
         """
         Async version of get_data_by_variable_locality.
         """
@@ -334,25 +629,74 @@ class DataAPI(BaseAPIClient):
             params["year"] = year
         if format:
             params["format"] = format
+        if extra_query:
+            params.update(extra_query)
         endpoint = f"data/by-variable/{variable_id}/locality/{locality_id}"
+
+        result: tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]
         if all_pages:
-            return await self.afetch_all_results(
-                endpoint,
-                params=params,
-                extra_query=extra_query,
-                page_size=page_size,
-                max_pages=max_pages,
-                results_key="results",
-                return_metadata=return_metadata,
-            )
+            if return_metadata:
+                result = await self.afetch_all_results(
+                    endpoint,
+                    params=params,
+                    page_size=page_size,
+                    max_pages=max_pages,
+                    results_key="results",
+                    return_metadata=True,
+                )
+            else:
+                result = await self.afetch_all_results(
+                    endpoint,
+                    params=params,
+                    page_size=page_size,
+                    max_pages=max_pages,
+                    results_key="results",
+                    return_metadata=False,
+                )
         else:
-            return await self.afetch_single_result(
-                endpoint,
-                results_key="results",
-                params=params,
-                extra_query=extra_query,
-                return_metadata=return_metadata,
-            )
+            if return_metadata:
+                result = await self.afetch_single_result(
+                    endpoint,
+                    results_key="results",
+                    params=params,
+                    return_metadata=True,
+                )
+            else:
+                result = await self.afetch_single_result(
+                    endpoint,
+                    results_key="results",
+                    params=params,
+                    return_metadata=False,
+                )
+        return result
+
+    @overload
+    async def aget_data_by_unit_locality(
+        self,
+        unit_id: str,
+        variable_id: str | None = None,
+        year: int | None = None,
+        format: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+        return_metadata: Literal[True] = True,
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]]: ...
+
+    @overload
+    async def aget_data_by_unit_locality(
+        self,
+        unit_id: str,
+        variable_id: str | None = None,
+        year: int | None = None,
+        format: str | None = None,
+        page_size: int = 100,
+        max_pages: int | None = None,
+        extra_query: dict[str, Any] | None = None,
+        all_pages: bool = True,
+        return_metadata: Literal[False] = False,
+    ) -> list[dict[str, Any]]: ...
 
     async def aget_data_by_unit_locality(
         self,
@@ -365,7 +709,7 @@ class DataAPI(BaseAPIClient):
         extra_query: dict[str, Any] | None = None,
         all_pages: bool = True,
         return_metadata: bool = True,
-    ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]:
         """
         Async version of get_data_by_unit_locality.
         """
@@ -376,25 +720,47 @@ class DataAPI(BaseAPIClient):
             params["year"] = year
         if format:
             params["format"] = format
+        if extra_query:
+            params.update(extra_query)
         endpoint = f"data/localities/by-unit/{unit_id}"
+
+        result: tuple[list[dict[str, Any]], dict[str, Any]] | list[dict[str, Any]]
         if all_pages:
-            return await self.afetch_all_results(
-                endpoint,
-                params=params,
-                extra_query=extra_query,
-                page_size=page_size,
-                max_pages=max_pages,
-                results_key="results",
-                return_metadata=return_metadata,
-            )
+            if return_metadata:
+                result = await self.afetch_all_results(
+                    endpoint,
+                    params=params,
+                    page_size=page_size,
+                    max_pages=max_pages,
+                    results_key="results",
+                    return_metadata=True,  # Explicit Literal[True]
+                )
+            else:
+                result = await self.afetch_all_results(
+                    endpoint,
+                    params=params,
+                    page_size=page_size,
+                    max_pages=max_pages,
+                    results_key="results",
+                    return_metadata=False,  # Explicit Literal[False]
+                )
         else:
-            return await self.afetch_single_result(
-                endpoint,
-                results_key="results",
-                params=params,
-                extra_query=extra_query,
-                return_metadata=return_metadata,
-            )
+            if return_metadata:
+                result = await self.afetch_single_result(
+                    endpoint,
+                    results_key="results",
+                    params=params,
+                    return_metadata=True,  # Explicit Literal[True]
+                )
+            else:
+                result = await self.afetch_single_result(
+                    endpoint,
+                    results_key="results",
+                    params=params,
+                    return_metadata=False,  # Explicit Literal[False]
+                )
+
+        return result
 
     async def aget_data_metadata(self) -> dict[str, Any]:
         """

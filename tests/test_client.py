@@ -3,7 +3,7 @@ from types import SimpleNamespace
 from pytest import MonkeyPatch
 
 from pyldb.client import LDB
-from pyldb.config import LDBConfig, Language
+from pyldb.config import Language, LDBConfig
 
 
 def test_ldb_initializes_all_apis(monkeypatch: MonkeyPatch) -> None:

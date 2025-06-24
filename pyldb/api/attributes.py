@@ -21,7 +21,7 @@ class AttributesAPI(BaseAPIClient):
             List of attribute metadata dictionaries.
         """
 
-        return self.fetch_single_result("attributes", results_key="results")
+        return self.fetch_all_results("attributes")
 
     def get_attribute(self, attribute_id: str) -> dict[str, Any]:
         """
@@ -52,7 +52,7 @@ class AttributesAPI(BaseAPIClient):
         """
         Async version of list_attributes.
         """
-        return await self.afetch_single_result("attributes", results_key="results")
+        return await self.afetch_all_results("attributes")
 
     async def aget_attribute(self, attribute_id: str) -> dict[str, Any]:
         """

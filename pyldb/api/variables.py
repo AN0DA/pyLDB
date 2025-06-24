@@ -50,18 +50,18 @@ class VariablesAPI(BaseAPIClient):
             params["name"] = name
         if sort:
             params["sort"] = sort
-
+        if extra_query:
+            params.update(extra_query)
         if all_pages:
             return self.fetch_all_results(
                 "variables",
                 params=params,
-                extra_query=extra_query,
                 page_size=page_size,
                 max_pages=max_pages,
                 results_key="results",
             )
         else:
-            return self.fetch_single_result("variables", results_key="results", params=params, extra_query=extra_query)
+            return self.fetch_single_result("variables", results_key="results", params=params)
 
     def get_variable(
         self,
@@ -80,7 +80,8 @@ class VariablesAPI(BaseAPIClient):
         Returns:
             Dictionary with variable metadata.
         """
-        return self.fetch_single_result(f"variables/{variable_id}", extra_query=extra_query)
+        params = extra_query if extra_query else None
+        return self.fetch_single_result(f"variables/{variable_id}", params=params)
 
     def search_variables(
         self,
@@ -120,19 +121,18 @@ class VariablesAPI(BaseAPIClient):
             params["aggregate-id"] = aggregate_id
         if sort:
             params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
         if all_pages:
             return self.fetch_all_results(
                 "variables/search",
                 params=params,
-                extra_query=extra_query,
                 page_size=page_size,
                 max_pages=max_pages,
                 results_key="results",
             )
         else:
-            return self.fetch_single_result(
-                "variables/search", results_key="results", params=params, extra_query=extra_query
-            )
+            return self.fetch_single_result("variables/search", results_key="results", params=params)
 
     def get_variables_metadata(self) -> dict[str, Any]:
         """
@@ -168,19 +168,18 @@ class VariablesAPI(BaseAPIClient):
             params["name"] = name
         if sort:
             params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
         if all_pages:
             return await self.afetch_all_results(
                 "variables",
                 params=params,
-                extra_query=extra_query,
                 page_size=page_size,
                 max_pages=max_pages,
                 results_key="results",
             )
         else:
-            return await self.afetch_single_result(
-                "variables", results_key="results", params=params, extra_query=extra_query
-            )
+            return await self.afetch_single_result("variables", results_key="results", params=params)
 
     async def aget_variable(
         self,
@@ -190,7 +189,8 @@ class VariablesAPI(BaseAPIClient):
         """
         Async version of get_variable.
         """
-        return await self.afetch_single_result(f"variables/{variable_id}", extra_query=extra_query)
+        params = extra_query if extra_query else None
+        return await self.afetch_single_result(f"variables/{variable_id}", params=params)
 
     async def asearch_variables(
         self,
@@ -215,19 +215,18 @@ class VariablesAPI(BaseAPIClient):
             params["aggregate-id"] = aggregate_id
         if sort:
             params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
         if all_pages:
             return await self.afetch_all_results(
                 "variables/search",
                 params=params,
-                extra_query=extra_query,
                 page_size=page_size,
                 max_pages=max_pages,
                 results_key="results",
             )
         else:
-            return await self.afetch_single_result(
-                "variables/search", results_key="results", params=params, extra_query=extra_query
-            )
+            return await self.afetch_single_result("variables/search", results_key="results", params=params)
 
     async def aget_variables_metadata(self) -> dict[str, Any]:
         """

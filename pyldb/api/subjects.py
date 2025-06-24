@@ -41,18 +41,18 @@ class SubjectsAPI(BaseAPIClient):
             params["parent-id"] = parent_id
         if sort:
             params["sort"] = sort
-
+        if extra_query:
+            params.update(extra_query)
         if all_pages:
             return self.fetch_all_results(
                 "subjects",
                 params=params,
-                extra_query=extra_query,
                 page_size=page_size,
                 max_pages=max_pages,
                 results_key="results",
             )
         else:
-            return self.fetch_single_result("subjects", results_key="results", params=params, extra_query=extra_query)
+            return self.fetch_all_results("subjects", params=params)
 
     def get_subject(
         self,
@@ -92,11 +92,12 @@ class SubjectsAPI(BaseAPIClient):
         Returns:
             List of subject metadata dictionaries matching the search.
         """
-        params = {"name": name}
+        params: dict[str, Any] = {"name": name}
+        if extra_query:
+            params.update(extra_query)
         return self.fetch_all_results(
             "subjects/search",
             params=params,
-            extra_query=extra_query,
             page_size=page_size,
             max_pages=max_pages,
             results_key="results",
@@ -130,19 +131,18 @@ class SubjectsAPI(BaseAPIClient):
             params["parent-id"] = parent_id
         if sort:
             params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
         if all_pages:
             return await self.afetch_all_results(
                 "subjects",
                 params=params,
-                extra_query=extra_query,
                 page_size=page_size,
                 max_pages=max_pages,
                 results_key="results",
             )
         else:
-            return await self.afetch_single_result(
-                "subjects", results_key="results", params=params, extra_query=extra_query
-            )
+            return await self.afetch_single_result("subjects", results_key="results", params=params)
 
     async def aget_subject(
         self,
@@ -163,11 +163,12 @@ class SubjectsAPI(BaseAPIClient):
         """
         Async version of search_subjects.
         """
-        params = {"name": name}
+        params: dict[str, Any] = {"name": name}
+        if extra_query:
+            params.update(extra_query)
         return await self.afetch_all_results(
             "subjects/search",
             params=params,
-            extra_query=extra_query,
             page_size=page_size,
             max_pages=max_pages,
             results_key="results",

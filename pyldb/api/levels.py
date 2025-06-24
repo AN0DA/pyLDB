@@ -31,8 +31,9 @@ class LevelsAPI(BaseAPIClient):
         params: dict[str, Any] = {}
         if sort:
             params["sort"] = sort
-
-        return self.fetch_single_result("levels", results_key="results", params=params, extra_query=extra_query)
+        if extra_query:
+            params.update(extra_query)
+        return self.fetch_all_results("levels", params=params)
 
     def get_level(
         self,
@@ -51,7 +52,8 @@ class LevelsAPI(BaseAPIClient):
         Returns:
             Dictionary with level metadata.
         """
-        return self.fetch_single_result(f"levels/{level_id}", extra_query=extra_query)
+        params = extra_query if extra_query else None
+        return self.fetch_single_result(f"levels/{level_id}", params=params)
 
     def get_levels_metadata(self) -> dict[str, Any]:
         """
@@ -75,7 +77,9 @@ class LevelsAPI(BaseAPIClient):
         params: dict[str, Any] = {}
         if sort:
             params["sort"] = sort
-        return await self.afetch_single_result("levels", results_key="results", params=params, extra_query=extra_query)
+        if extra_query:
+            params.update(extra_query)
+        return await self.afetch_all_results("levels", params=params)
 
     async def aget_level(
         self,
@@ -85,7 +89,8 @@ class LevelsAPI(BaseAPIClient):
         """
         Async version of get_level.
         """
-        return await self.afetch_single_result(f"levels/{level_id}", extra_query=extra_query)
+        params = extra_query if extra_query else None
+        return await self.afetch_single_result(f"levels/{level_id}", params=params)
 
     async def aget_levels_metadata(self) -> dict[str, Any]:
         """

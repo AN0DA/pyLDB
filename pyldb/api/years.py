@@ -31,8 +31,9 @@ class YearsAPI(BaseAPIClient):
         params: dict[str, Any] = {}
         if sort:
             params["sort"] = sort
-
-        return self.fetch_single_result("years", results_key="results", params=params, extra_query=extra_query)
+        if extra_query:
+            params.update(extra_query)
+        return self.fetch_all_results("years", params=params)
 
     def get_year(
         self,
@@ -51,7 +52,8 @@ class YearsAPI(BaseAPIClient):
         Returns:
             Dictionary with year metadata.
         """
-        return self.fetch_single_result(f"years/{year_id}", extra_query=extra_query)
+        params = extra_query if extra_query else None
+        return self.fetch_single_result(f"years/{year_id}", params=params)
 
     def get_years_metadata(self) -> dict[str, Any]:
         """
@@ -75,7 +77,9 @@ class YearsAPI(BaseAPIClient):
         params: dict[str, Any] = {}
         if sort:
             params["sort"] = sort
-        return await self.afetch_single_result("years", results_key="results", params=params, extra_query=extra_query)
+        if extra_query:
+            params.update(extra_query)
+        return await self.afetch_all_results("years", params=params)
 
     async def aget_year(
         self,
@@ -85,7 +89,8 @@ class YearsAPI(BaseAPIClient):
         """
         Async version of get_year.
         """
-        return await self.afetch_single_result(f"years/{year_id}", extra_query=extra_query)
+        params = extra_query if extra_query else None
+        return await self.afetch_single_result(f"years/{year_id}", params=params)
 
     async def aget_years_metadata(self) -> dict[str, Any]:
         """

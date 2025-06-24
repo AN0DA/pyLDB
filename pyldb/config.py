@@ -131,7 +131,9 @@ class LDBConfig:
             if not isinstance(self.custom_quotas, dict):
                 raise ValueError("custom_quotas must be a dictionary of {period_seconds: int}")
             for k, v in self.custom_quotas.items():
-                if not (isinstance(k, int) and k in QUOTA_PERIODS and isinstance(v, int) and v > 0):
-                    raise ValueError(f"custom_quotas keys must be one of {QUOTA_PERIODS} and values positive int")
+                if not (isinstance(k, int) and k in QUOTA_PERIODS.values() and isinstance(v, int) and v > 0):
+                    raise ValueError(
+                        f"custom_quotas keys must be one of {list(QUOTA_PERIODS.values())} and values positive int"
+                    )
                 merged_quotas[k] = v
         self.custom_quotas = merged_quotas

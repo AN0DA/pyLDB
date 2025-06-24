@@ -4,13 +4,13 @@ from urllib.parse import urlencode
 import pytest
 import responses
 
-from pyldb.config import LDBConfig
+from pyldb.config import Language, LDBConfig
 
 
 @pytest.fixture
 def dummy_config() -> LDBConfig:
     """Provide a dummy LDBConfig for testing."""
-    return LDBConfig(api_key="dummy-api-key", language="en", use_cache=False, cache_expire_after=100)
+    return LDBConfig(api_key="dummy-api-key", language=Language.EN, use_cache=False, cache_expire_after=100)
 
 
 @pytest.fixture

@@ -50,18 +50,18 @@ class UnitsAPI(BaseAPIClient):
             params["name"] = name
         if sort:
             params["sort"] = sort
-
+        if extra_query:
+            params.update(extra_query)
         if all_pages:
             return self.fetch_all_results(
                 "units",
                 params=params,
-                extra_query=extra_query,
                 page_size=page_size,
                 max_pages=max_pages,
                 results_key="results",
             )
         else:
-            return self.fetch_single_result("units", results_key="results", params=params, extra_query=extra_query)
+            return self.fetch_all_results("units", params=params)
 
     def get_unit(
         self,
@@ -80,7 +80,8 @@ class UnitsAPI(BaseAPIClient):
         Returns:
             Dictionary with unit metadata.
         """
-        return self.fetch_single_result(f"units/{unit_id}", extra_query=extra_query)
+        params = extra_query if extra_query else None
+        return self.fetch_single_result(f"units/{unit_id}", params=params)
 
     def search_units(
         self,
@@ -120,19 +121,18 @@ class UnitsAPI(BaseAPIClient):
             params["parent-id"] = parent_id
         if sort:
             params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
         if all_pages:
             return self.fetch_all_results(
                 "units/search",
                 params=params,
-                extra_query=extra_query,
                 page_size=page_size,
                 max_pages=max_pages,
                 results_key="results",
             )
         else:
-            return self.fetch_single_result(
-                "units/search", results_key="results", params=params, extra_query=extra_query
-            )
+            return self.fetch_single_result("units/search", results_key="results", params=params)
 
     def list_localities(
         self,
@@ -172,19 +172,18 @@ class UnitsAPI(BaseAPIClient):
             params["parent-id"] = parent_id
         if sort:
             params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
         if all_pages:
             return self.fetch_all_results(
                 "units/localities",
                 params=params,
-                extra_query=extra_query,
                 page_size=page_size,
                 max_pages=max_pages,
                 results_key="results",
             )
         else:
-            return self.fetch_single_result(
-                "units/localities", results_key="results", params=params, extra_query=extra_query
-            )
+            return self.fetch_single_result("units/localities", results_key="results", params=params)
 
     def get_locality(
         self,
@@ -203,7 +202,8 @@ class UnitsAPI(BaseAPIClient):
         Returns:
             Dictionary with locality metadata.
         """
-        return self.fetch_single_result(f"units/localities/{locality_id}", extra_query=extra_query)
+        params = extra_query if extra_query else None
+        return self.fetch_single_result(f"units/localities/{locality_id}", params=params)
 
     def search_localities(
         self,
@@ -243,19 +243,18 @@ class UnitsAPI(BaseAPIClient):
             params["parent-id"] = parent_id
         if sort:
             params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
         if all_pages:
             return self.fetch_all_results(
                 "units/localities/search",
                 params=params,
-                extra_query=extra_query,
                 page_size=page_size,
                 max_pages=max_pages,
                 results_key="results",
             )
         else:
-            return self.fetch_single_result(
-                "units/localities/search", results_key="results", params=params, extra_query=extra_query
-            )
+            return self.fetch_single_result("units/localities/search", results_key="results", params=params)
 
     def get_units_metadata(self) -> dict[str, Any]:
         """
@@ -291,19 +290,18 @@ class UnitsAPI(BaseAPIClient):
             params["name"] = name
         if sort:
             params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
         if all_pages:
             return await self.afetch_all_results(
                 "units",
                 params=params,
-                extra_query=extra_query,
                 page_size=page_size,
                 max_pages=max_pages,
                 results_key="results",
             )
         else:
-            return await self.afetch_single_result(
-                "units", results_key="results", params=params, extra_query=extra_query
-            )
+            return await self.afetch_single_result("units", results_key="results", params=params)
 
     async def aget_unit(
         self,
@@ -313,7 +311,8 @@ class UnitsAPI(BaseAPIClient):
         """
         Async version of get_unit.
         """
-        return await self.afetch_single_result(f"units/{unit_id}", extra_query=extra_query)
+        params = extra_query if extra_query else None
+        return await self.afetch_single_result(f"units/{unit_id}", params=params)
 
     async def asearch_units(
         self,
@@ -338,19 +337,18 @@ class UnitsAPI(BaseAPIClient):
             params["parent-id"] = parent_id
         if sort:
             params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
         if all_pages:
             return await self.afetch_all_results(
                 "units/search",
                 params=params,
-                extra_query=extra_query,
                 page_size=page_size,
                 max_pages=max_pages,
                 results_key="results",
             )
         else:
-            return await self.afetch_single_result(
-                "units/search", results_key="results", params=params, extra_query=extra_query
-            )
+            return await self.afetch_single_result("units/search", results_key="results", params=params)
 
     async def alist_localities(
         self,
@@ -375,19 +373,18 @@ class UnitsAPI(BaseAPIClient):
             params["parent-id"] = parent_id
         if sort:
             params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
         if all_pages:
             return await self.afetch_all_results(
                 "units/localities",
                 params=params,
-                extra_query=extra_query,
                 page_size=page_size,
                 max_pages=max_pages,
                 results_key="results",
             )
         else:
-            return await self.afetch_single_result(
-                "units/localities", results_key="results", params=params, extra_query=extra_query
-            )
+            return await self.afetch_single_result("units/localities", results_key="results", params=params)
 
     async def aget_locality(
         self,
@@ -397,7 +394,8 @@ class UnitsAPI(BaseAPIClient):
         """
         Async version of get_locality.
         """
-        return await self.afetch_single_result(f"units/localities/{locality_id}", extra_query=extra_query)
+        params = extra_query if extra_query else None
+        return await self.afetch_single_result(f"units/localities/{locality_id}", params=params)
 
     async def asearch_localities(
         self,
@@ -422,19 +420,18 @@ class UnitsAPI(BaseAPIClient):
             params["parent-id"] = parent_id
         if sort:
             params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
         if all_pages:
             return await self.afetch_all_results(
                 "units/localities/search",
                 params=params,
-                extra_query=extra_query,
                 page_size=page_size,
                 max_pages=max_pages,
                 results_key="results",
             )
         else:
-            return await self.afetch_single_result(
-                "units/localities/search", results_key="results", params=params, extra_query=extra_query
-            )
+            return await self.afetch_single_result("units/localities/search", results_key="results", params=params)
 
     async def aget_units_metadata(self) -> dict[str, Any]:
         """

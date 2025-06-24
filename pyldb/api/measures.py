@@ -31,8 +31,9 @@ class MeasuresAPI(BaseAPIClient):
         params: dict[str, Any] = {}
         if sort:
             params["sort"] = sort
-
-        return self.fetch_single_result("measures", results_key="results", params=params, extra_query=extra_query)
+        if extra_query:
+            params.update(extra_query)
+        return self.fetch_all_results("measures", params=params)
 
     def get_measure(
         self,
@@ -51,7 +52,8 @@ class MeasuresAPI(BaseAPIClient):
         Returns:
             Dictionary with measure unit metadata.
         """
-        return self.fetch_single_result(f"measures/{measure_id}", extra_query=extra_query)
+        params = extra_query if extra_query else None
+        return self.fetch_single_result(f"measures/{measure_id}", params=params)
 
     def get_measures_metadata(self) -> dict[str, Any]:
         """
@@ -75,9 +77,9 @@ class MeasuresAPI(BaseAPIClient):
         params: dict[str, Any] = {}
         if sort:
             params["sort"] = sort
-        return await self.afetch_single_result(
-            "measures", results_key="results", params=params, extra_query=extra_query
-        )
+        if extra_query:
+            params.update(extra_query)
+        return await self.afetch_single_result("measures", results_key="results", params=params)
 
     async def aget_measure(
         self,
@@ -87,7 +89,8 @@ class MeasuresAPI(BaseAPIClient):
         """
         Async version of get_measure.
         """
-        return await self.afetch_single_result(f"measures/{measure_id}", extra_query=extra_query)
+        params = extra_query if extra_query else None
+        return await self.afetch_single_result(f"measures/{measure_id}", params=params)
 
     async def aget_measures_metadata(self) -> dict[str, Any]:
         """
