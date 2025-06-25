@@ -14,10 +14,7 @@ class AggregatesAPI(BaseAPIClient):
     def list_aggregates(
         self,
         sort: str | None = None,
-        page_size: int = 100,
-        max_pages: int | None = None,
         extra_query: dict[str, Any] | None = None,
-        all_pages: bool = True,
     ) -> list[dict[str, Any]]:
         """
         List all aggregates, optionally sorted.
@@ -37,21 +34,11 @@ class AggregatesAPI(BaseAPIClient):
         params: dict[str, Any] = {}
         if sort:
             params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
+        return self.fetch_all_results("aggregates", params=params)
 
-        if all_pages:
-            return self.fetch_all_results(
-                "aggregates",
-                params=params,
-                extra_query=extra_query,
-                page_size=page_size,
-                max_pages=max_pages,
-                results_key="results",
-            )
-        else:
-            resp = self._make_request("aggregates", params=params, extra_query=extra_query)
-            return resp.get("results", [])
-
-    def get_aggregate_info(self, aggregate_id: str) -> dict[str, Any]:
+    def get_aggregate(self, aggregate_id: str) -> dict[str, Any]:
         """
         Retrieve metadata details for a specific aggregate.
 
@@ -63,69 +50,64 @@ class AggregatesAPI(BaseAPIClient):
         Returns:
             Dictionary with aggregate metadata.
         """
-        return self._make_request(f"aggregates/{aggregate_id}")
+        return self.fetch_single_result(f"aggregates/{aggregate_id}")
 
-    def list_aggregates_metadata(
-        self,
-        page_size: int = 100,
-        max_pages: int | None = None,
-        extra_query: dict[str, Any] | None = None,
-        all_pages: bool = True,
-    ) -> list[dict[str, Any]]:
+    def get_aggregates_metadata(self) -> dict[str, Any]:
         """
         List all aggregates metadata.
 
         Maps to: GET /aggregates/metadata
 
+        Returns:
+            List of aggregate metadata dictionaries.
+        """
+        return self.fetch_single_result("aggregates/metadata")
+
+    async def alist_aggregates(
+        self,
+        sort: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+    ) -> list[dict[str, Any]]:
+        """
+        Asynchronously list all aggregates, optionally sorted.
+
+        Maps to: GET /aggregates
+
         Args:
-            page_size: Number of results per page.
-            max_pages: Maximum number of pages to fetch (None for all).
+            sort: Sorting order, e.g., 'Id', '-Id', 'Name', '-Name', etc.
             extra_query: Additional query parameters.
-            all_pages: If True, fetch all pages; otherwise, fetch only the first.
 
         Returns:
             List of aggregate metadata dictionaries.
         """
-        if all_pages:
-            return self.fetch_all_results(
-                "aggregates/metadata",
-                params={},
-                extra_query=extra_query,
-                page_size=page_size,
-                max_pages=max_pages,
-                results_key="results",
-            )
-        else:
-            resp = self._make_request("aggregates/metadata", params={}, extra_query=extra_query)
-            return resp.get("results", [])
+        params: dict[str, Any] = {}
+        if sort:
+            params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
+        return await self.afetch_single_result("aggregates", results_key="results", params=params)
 
-    def get_aggregate_metadata_info(self, aggregate_id: str) -> dict[str, Any]:
+    async def aget_aggregate(self, aggregate_id: str) -> dict[str, Any]:
         """
-        Retrieve metadata for a specific aggregate (from /aggregates/metadata/{id}).
+        Asynchronously retrieve metadata details for a specific aggregate.
 
-        Maps to: GET /aggregates/metadata/{id}
+        Maps to: GET /aggregates/{id}
 
         Args:
             aggregate_id: Aggregate identifier.
 
         Returns:
-            Dictionary with aggregate metadata details.
+            Dictionary with aggregate metadata.
         """
-        return self._make_request(f"aggregates/metadata/{aggregate_id}")
+        return await self.afetch_single_result(f"aggregates/{aggregate_id}")
 
-    def get_aggregates_metadata(
-        self,
-        extra_query: dict[str, Any] | None = None,
-    ) -> dict[str, Any]:
+    async def aget_aggregates_metadata(self) -> dict[str, Any]:
         """
-        Retrieve general metadata for the /aggregates endpoint.
+        Asynchronously list all aggregates metadata.
 
-        Maps to: GET /aggregates/metadata (returns API info, not list of aggregates)
-
-        Args:
-            extra_query: Additional query parameters, e.g., {'lang': 'en'}.
+        Maps to: GET /aggregates/metadata
 
         Returns:
-            Dictionary with endpoint metadata and versioning info.
+            List of aggregate metadata dictionaries.
         """
-        return self._make_request("aggregates/metadata", extra_query=extra_query)
+        return await self.afetch_single_result("aggregates/metadata")

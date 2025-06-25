@@ -10,19 +10,24 @@ class VersionAPI(BaseAPIClient):
     Provides access to version and build information for the Local Data Bank (LDB) API.
     """
 
-    def get_version(
-        self,
-        extra_query: dict[str, Any] | None = None,
-    ) -> dict[str, Any]:
+    def get_version(self) -> dict[str, Any]:
         """
-        Retrieve API version and build information.
+        Retrieve the API version and build information.
 
         Maps to: GET /version
 
-        Args:
-            extra_query: Additional query parameters, e.g. {'lang': 'en'}.
+        Returns:
+            Dictionary with version and build metadata.
+        """
+        return self.fetch_single_result("version")
+
+    async def aget_version(self) -> dict[str, Any]:
+        """
+        Asynchronously retrieve the API version and build information.
+
+        Maps to: GET /version
 
         Returns:
-            Dictionary with version and build information.
+            Dictionary with version and build metadata.
         """
-        return self._make_request("version", extra_query=extra_query)
+        return await self.afetch_single_result("version")

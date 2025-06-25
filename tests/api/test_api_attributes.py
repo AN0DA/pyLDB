@@ -16,6 +16,8 @@ def attributes_api(dummy_config: LDBConfig) -> AttributesAPI:
 @responses.activate
 def test_list_attributes(attributes_api: AttributesAPI, api_url: str) -> None:
     url = f"{api_url}/attributes"
+    expected = {"results": [{"id": 1, "name": "Attr1"}]}
+    responses.add(responses.GET, url, json=expected, status=200)
     paginated_mock(url, [{"id": 1, "name": "Attr1"}])
     result = attributes_api.list_attributes()
     assert isinstance(result, list)
@@ -25,25 +27,23 @@ def test_list_attributes(attributes_api: AttributesAPI, api_url: str) -> None:
 @responses.activate
 def test_list_attributes_with_variable_id(attributes_api: AttributesAPI, api_url: str) -> None:
     base_url = f"{api_url}/attributes"
-    query = urlencode({"variable-id": "5", "lang": "en", "page": "0", "page-size": "100"})
+    query = urlencode({"lang": "en", "page-size": "100"})
     url = f"{base_url}?{query}"
     responses.add(responses.GET, url, json={"results": []}, status=200)
-    attributes_api.list_attributes(variable_id="5")
-    # responses stores requests in responses.calls
+    attributes_api.list_attributes()
+
     called_url = responses.calls[0].request.url
     assert called_url is not None
-    assert "variable-id=5" in called_url
     assert "lang=en" in called_url
-    assert "page=0" in called_url
     assert "page-size=100" in called_url
 
 
 @responses.activate
-def test_get_attribute_info(attributes_api: AttributesAPI, api_url: str) -> None:
+def test_get_attribute(attributes_api: AttributesAPI, api_url: str) -> None:
     url = f"{api_url}/attributes/7"
     expected = {"id": 7, "name": "Attr7"}
     responses.add(responses.GET, url, json=expected, status=200)
-    result = attributes_api.get_attribute_info(attribute_id="7")
+    result = attributes_api.get_attribute(attribute_id="7")
     assert result["id"] == 7
 
 

@@ -31,11 +31,11 @@ class LevelsAPI(BaseAPIClient):
         params: dict[str, Any] = {}
         if sort:
             params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
+        return self.fetch_all_results("levels", params=params)
 
-        resp = self._make_request("levels", params=params, extra_query=extra_query)
-        return resp.get("results", [])
-
-    def get_level_info(
+    def get_level(
         self,
         level_id: int,
         extra_query: dict[str, Any] | None = None,
@@ -52,21 +52,71 @@ class LevelsAPI(BaseAPIClient):
         Returns:
             Dictionary with level metadata.
         """
-        return self._make_request(f"levels/{level_id}", extra_query=extra_query)
+        params = extra_query if extra_query else None
+        return self.fetch_single_result(f"levels/{level_id}", params=params)
 
-    def get_levels_metadata(
-        self,
-        extra_query: dict[str, Any] | None = None,
-    ) -> dict[str, Any]:
+    def get_levels_metadata(self) -> dict[str, Any]:
         """
         Retrieve general metadata and version information for the /levels endpoint.
 
         Maps to: GET /levels/metadata
 
+        Returns:
+            Dictionary with API metadata and versioning info.
+        """
+        return self.fetch_single_result("levels/metadata")
+
+    async def alist_levels(
+        self,
+        sort: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+    ) -> list[dict[str, Any]]:
+        """
+        Asynchronously list all administrative unit aggregation levels.
+
+        Maps to: GET /levels
+
         Args:
-            extra_query: Additional query parameters, e.g., {'lang': 'en'}.
+            sort: Optional sorting order, e.g., 'Id', '-Id', 'Name', '-Name'.
+            extra_query: Additional query parameters.
+
+        Returns:
+            List of aggregation level metadata dictionaries.
+        """
+        params: dict[str, Any] = {}
+        if sort:
+            params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
+        return await self.afetch_all_results("levels", params=params)
+
+    async def aget_level(
+        self,
+        level_id: int,
+        extra_query: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """
+        Asynchronously retrieve metadata for a specific aggregation level.
+
+        Maps to: GET /levels/{id}
+
+        Args:
+            level_id: Aggregation level identifier (integer).
+            extra_query: Additional query parameters.
+
+        Returns:
+            Dictionary with level metadata.
+        """
+        params = extra_query if extra_query else None
+        return await self.afetch_single_result(f"levels/{level_id}", params=params)
+
+    async def aget_levels_metadata(self) -> dict[str, Any]:
+        """
+        Asynchronously retrieve general metadata and version information for the /levels endpoint.
+
+        Maps to: GET /levels/metadata
 
         Returns:
             Dictionary with API metadata and versioning info.
         """
-        return self._make_request("levels/metadata", extra_query=extra_query)
+        return await self.afetch_single_result("levels/metadata")

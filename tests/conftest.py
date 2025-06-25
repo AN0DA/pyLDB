@@ -4,13 +4,13 @@ from urllib.parse import urlencode
 import pytest
 import responses
 
-from pyldb.config import LDBConfig
+from pyldb.config import Language, LDBConfig
 
 
 @pytest.fixture
 def dummy_config() -> LDBConfig:
     """Provide a dummy LDBConfig for testing."""
-    return LDBConfig(api_key="dummy-api-key", language="en", use_cache=False, cache_expire_after=100)
+    return LDBConfig(api_key="dummy-api-key", language=Language.EN, use_cache=False, cache_expire_after=100)
 
 
 @pytest.fixture
@@ -23,19 +23,41 @@ def paginated_mock(
 ) -> None:
     """
     Mocks two paginated responses using the `responses` library:
-    - page=0 returns the supplied data
-    - page=1 returns an empty result list
+    - First page returns the supplied data and a links.next to the next page
+    - Second page returns an empty result list and a links object with navigation fields but no next
     Accepts extra_params dict for additional query params (e.g. lang).
     """
     params = extra_params.copy() if extra_params else {}
     params["page-size"] = str(page_size)
     params["lang"] = "en"
 
-    # Page 0
-    params["page"] = "0"
+    # First page: no 'page' param
     url_0 = f"{base_url}?{urlencode(params)}"
-    responses.add(responses.GET, url_0, json={"results": data, "totalRecords": len(data) + 1}, status=200)
-    # Page 1
-    params["page"] = "1"
-    url_1 = f"{base_url}?{urlencode(params)}"
-    responses.add(responses.GET, url_1, json={"results": []}, status=200)
+    params_next = params.copy()
+    params_next["page"] = "1"
+    url_1 = f"{base_url}?{urlencode(params_next)}"
+    responses.add(
+        responses.GET,
+        url_0,
+        json={
+            "results": data,
+            "totalRecords": len(data) + 1,
+            "links": {"next": url_1},
+        },
+        status=200,
+    )
+    # Second page: with 'page=1', links has navigation fields but no 'next'
+    responses.add(
+        responses.GET,
+        url_1,
+        json={
+            "results": [],
+            "links": {
+                "first": url_0,
+                "prev": url_0,
+                "self": url_1,
+                "last": url_1,
+            },
+        },
+        status=200,
+    )

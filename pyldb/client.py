@@ -5,14 +5,23 @@ from pyldb.config import LDBConfig
 
 
 class LDB:
-    """Main interface for interacting with LDB API."""
+    """
+    Main interface for interacting with the Local Data Bank (LDB) API.
+
+    This class provides a unified entry point to all LDB API endpoints, including aggregates,
+    attributes, data, levels, measures, subjects, units, variables, version, and years.
+    """
 
     def __init__(self, config: LDBConfig | None = None):
-        """Initialize LDB client.
+        """
+        Initialize the LDB client and all API endpoint namespaces.
 
         Args:
-            config: Configuration object. If not provided, a new instance will be created
-                   using environment variables and defaults.
+            config: LDBConfig instance or dict. If not provided, configuration is loaded from
+                environment variables and defaults.
+
+        Raises:
+            TypeError: If config is not a dict, LDBConfig, or None.
 
         Note:
             Configuration can be set through:
@@ -20,8 +29,15 @@ class LDB:
             2. Environment variables (LDB_API_KEY, LDB_LANGUAGE, etc.)
             3. Default values
         """
-        self.config = config or LDBConfig()
+        if isinstance(config, dict):
+            config_obj = LDBConfig(**config)
+        elif isinstance(config, LDBConfig) or config is None:
+            config_obj = config or LDBConfig()
+        else:
+            raise TypeError(f"config must be a dict, LDBConfig, or None, got {type(config)}")
+        self.config = config_obj
 
+        # Initialize API namespace first
         self.api = SimpleNamespace()
         self.api.aggregates = api.AggregatesAPI(self.config)
         self.api.attributes = api.AttributesAPI(self.config)

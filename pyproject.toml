@@ -1,7 +1,7 @@
 [project]
 name = "pyLDB"
 version = "0.0.1"
-description = "A Pythonic interface for LDB (Local Data Bank) datasets."
+description = "A Pythonic interface for LDB (GUS Local Data Bank) datasets."
 readme = "README.md"
 authors = [{name = "Mikołaj Kaczmarek", email = "12432719+AN0DA@users.noreply.github.com"}]
 license = {text = "MIT"}
@@ -9,12 +9,14 @@ license = {text = "MIT"}
 requires-python = ">=3.11"
 dependencies = [
     "dataclasses>=0.8",
+    "httpx>=0.28.1",
     "matplotlib>=3.10.3",
     "numpy>=2.3.0",
     "pandas>=2.3.0",
     "requests>=2.32.4",
     "requests-cache>=1.2.1",
     "seaborn>=0.13.2",
+    "tqdm>=4.66.0",
 ]
 
 [dependency-groups]
@@ -22,13 +24,18 @@ dev = [
     "bandit>=1.8.3",
     "mypy>=1.15.0",
     "notebook>=7.4.3",
+    "pytest-asyncio>=1.0.0",
     "pytest-cov>=6.0.0",
     "pytest-mock>=3.14.0",
     "pytest>=8.3.5",
     "responses>=0.25.7",
     "ruff>=0.9.10",
-    "sphinx>=8.2.3",
     "types-requests>=2.32.0.20250306",
+]
+docs = [
+    "sphinx>=8.2.3",
+    "sphinx-autodoc-typehints>=3.2.0",
+    "sphinx-rtd-theme>=3.0.2",
 ]
 
 [tool.ruff]

@@ -1,6 +1,25 @@
 pyLDB documentation
 ===================
 
+What is the Local Data Bank (LDB)?
+----------------------------------
+
+The Local Data Bank (LDB, Bank Danych Lokalnych) is Poland's official statistical data warehouse, maintained by Statistics Poland (GUS). It provides access to a vast range of statistical indicators and datasets covering:
+
+- Demographics and population
+- Economy and labor market
+- Education, health, and social welfare
+- Environment and infrastructure
+- Regional and local statistics (down to municipality level)
+- Historical time series and more
+
+Data is available for various administrative units (country, voivodeship, county, municipality) and can be filtered by year, subject, and other attributes. The LDB is a primary source for open, official statistics in Poland.
+
+For a full description of available data, endpoints, and API usage, see:
+
+- Official BDL API documentation: https://api.stat.gov.pl/Home/BdlApi
+- LDB web portal: https://bdl.stat.gov.pl/bdl/start
+
 pyLDB is a modern, Pythonic client library for the Local Data Bank (LDB, Bank Danych Lokalnych) API,
 enabling easy, robust access to Polish official statistics for data science, research,
 and applications.
@@ -49,14 +68,6 @@ API Reference
 
    main_client
    api_clients
-   config
-
-Configuration Reference
------------------------
-
-.. toctree::
-   :maxdepth: 2
-
    config
 
 Contributing & License
