@@ -27,7 +27,7 @@ def test_list_attributes(attributes_api: AttributesAPI, api_url: str) -> None:
 @responses.activate
 def test_list_attributes_with_variable_id(attributes_api: AttributesAPI, api_url: str) -> None:
     base_url = f"{api_url}/attributes"
-    query = urlencode({"lang": "en"})
+    query = urlencode({"lang": "en", "page-size": "100"})
     url = f"{base_url}?{query}"
     responses.add(responses.GET, url, json={"results": []}, status=200)
     attributes_api.list_attributes()
@@ -35,6 +35,7 @@ def test_list_attributes_with_variable_id(attributes_api: AttributesAPI, api_url
     called_url = responses.calls[0].request.url
     assert called_url is not None
     assert "lang=en" in called_url
+    assert "page-size=100" in called_url
 
 
 @responses.activate

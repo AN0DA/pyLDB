@@ -64,3 +64,59 @@ def test_get_units_metadata(units_api: UnitsAPI, api_url: str) -> None:
     responses.add(responses.GET, url, json=payload, status=200)
     result = units_api.get_units_metadata()
     assert result["info"] == "Units API"
+
+
+@responses.activate
+def test_search_units(units_api: UnitsAPI, api_url: str) -> None:
+    url = f"{api_url}/units/search?name=Warsaw&lang=en&page-size=100"
+    responses.add(responses.GET, url, json={"results": [{"id": "WAW", "name": "Warsaw"}]}, status=200)
+    result = units_api.search_units(name="Warsaw")
+    assert result[0]["name"] == "Warsaw"
+
+
+@responses.activate
+def test_search_units_single_page(units_api: UnitsAPI, api_url: str) -> None:
+    url = f"{api_url}/units/search?name=Krakow&lang=en"
+    responses.add(responses.GET, url, json={"results": [{"id": "KRK", "name": "Krakow"}]}, status=200)
+    result = units_api.search_units(name="Krakow", all_pages=False)
+    assert result[0]["name"] == "Krakow"
+
+
+@responses.activate
+def test_list_localities(units_api: UnitsAPI, api_url: str) -> None:
+    url = f"{api_url}/units/localities?lang=en&page-size=100"
+    responses.add(responses.GET, url, json={"results": [{"id": "L1", "name": "Loc1"}]}, status=200)
+    result = units_api.list_localities()
+    assert result[0]["id"] == "L1"
+
+
+@responses.activate
+def test_list_localities_single_page(units_api: UnitsAPI, api_url: str) -> None:
+    url = f"{api_url}/units/localities?lang=en"
+    responses.add(responses.GET, url, json={"results": [{"id": "L2", "name": "Loc2"}]}, status=200)
+    result = units_api.list_localities(all_pages=False)
+    assert result[0]["id"] == "L2"
+
+
+@responses.activate
+def test_get_locality(units_api: UnitsAPI, api_url: str) -> None:
+    url = f"{api_url}/units/localities/L1?lang=en"
+    responses.add(responses.GET, url, json={"id": "L1", "name": "Loc1"}, status=200)
+    result = units_api.get_locality(locality_id="L1")
+    assert result["id"] == "L1"
+
+
+@responses.activate
+def test_search_localities(units_api: UnitsAPI, api_url: str) -> None:
+    url = f"{api_url}/units/localities/search?name=Loc&lang=en&page-size=100"
+    responses.add(responses.GET, url, json={"results": [{"id": "L1", "name": "Loc"}]}, status=200)
+    result = units_api.search_localities(name="Loc")
+    assert result[0]["id"] == "L1"
+
+
+@responses.activate
+def test_search_localities_single_page(units_api: UnitsAPI, api_url: str) -> None:
+    url = f"{api_url}/units/localities/search?name=Loc2&lang=en"
+    responses.add(responses.GET, url, json={"results": [{"id": "L2", "name": "Loc2"}]}, status=200)
+    result = units_api.search_localities(name="Loc2", all_pages=False)
+    assert result[0]["id"] == "L2"

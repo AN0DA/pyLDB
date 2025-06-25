@@ -18,3 +18,17 @@ def test_get_version(version_api: VersionAPI, api_url: str) -> None:
     result = version_api.get_version()
     assert result["version"] == "1.2.3"
     assert result["build"] == "2025-06-11"
+
+
+@pytest.mark.asyncio
+async def test_aget_version(monkeypatch: pytest.MonkeyPatch) -> None:
+    api = VersionAPI(LDBConfig(api_key="dummy"))
+
+    async def fake_afetch_single_result(endpoint: str) -> dict[str, str]:
+        assert endpoint == "version"
+        return {"version": "2.0.0", "build": "future"}
+
+    monkeypatch.setattr(api, "afetch_single_result", fake_afetch_single_result)
+    result = await api.aget_version()
+    assert result["version"] == "2.0.0"
+    assert result["build"] == "future"

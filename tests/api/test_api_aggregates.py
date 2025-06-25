@@ -22,7 +22,7 @@ def test_list_aggregates(aggregates_api: AggregatesAPI, api_url: str) -> None:
 
 @responses.activate
 def test_list_aggregates_with_sort(aggregates_api: AggregatesAPI, api_url: str) -> None:
-    url = f"{api_url}/aggregates?sort=Name&lang=en"
+    url = f"{api_url}/aggregates?sort=Name&lang=en&page-size=100"
     responses.add(responses.GET, url, json={"results": []}, status=200)
     aggregates_api.list_aggregates(sort="Name")
     # With responses, you can inspect the call arguments:
@@ -30,6 +30,15 @@ def test_list_aggregates_with_sort(aggregates_api: AggregatesAPI, api_url: str) 
     assert called_url is not None
     assert "sort=Name" in called_url
     assert "lang=en" in called_url
+    assert "page-size=100" in called_url
+
+
+@responses.activate
+def test_list_aggregates_extra_query(aggregates_api: AggregatesAPI, api_url: str) -> None:
+    url = f"{api_url}/aggregates?foo=bar&lang=en&page-size=100"
+    responses.add(responses.GET, url, json={"results": [{"id": 1}]}, status=200)
+    result = aggregates_api.list_aggregates(extra_query={"foo": "bar"})
+    assert result[0]["id"] == 1
 
 
 @responses.activate
@@ -48,3 +57,37 @@ def test_get_aggregates_metadata(aggregates_api: AggregatesAPI, api_url: str) ->
     responses.add(responses.GET, url, json=expected, status=200)
     result = aggregates_api.get_aggregates_metadata()
     assert result["info"] == "Metadata"
+
+
+class DummyException(Exception):
+    pass
+
+
+@responses.activate
+def test_list_aggregates_error(aggregates_api: AggregatesAPI) -> None:
+    def raise_exc(*a: object, **k: object) -> None:
+        raise DummyException("fail")
+
+    aggregates_api.fetch_all_results = raise_exc  # type: ignore[assignment]
+    with pytest.raises(DummyException):
+        aggregates_api.list_aggregates()
+
+
+@responses.activate
+def test_get_aggregate_error(aggregates_api: AggregatesAPI) -> None:
+    def raise_exc(*a: object, **k: object) -> None:
+        raise DummyException("fail")
+
+    aggregates_api.fetch_single_result = raise_exc  # type: ignore[assignment]
+    with pytest.raises(DummyException):
+        aggregates_api.get_aggregate("42")
+
+
+@responses.activate
+def test_get_aggregates_metadata_error(aggregates_api: AggregatesAPI) -> None:
+    def raise_exc(*a: object, **k: object) -> None:
+        raise DummyException("fail")
+
+    aggregates_api.fetch_single_result = raise_exc  # type: ignore[assignment]
+    with pytest.raises(DummyException):
+        aggregates_api.get_aggregates_metadata()

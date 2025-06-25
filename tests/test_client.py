@@ -1,6 +1,6 @@
 from types import SimpleNamespace
 
-from pytest import MonkeyPatch
+from pytest import MonkeyPatch, raises
 
 from pyldb.client import LDB
 from pyldb.config import Language, LDBConfig
@@ -54,3 +54,29 @@ def test_ldb_config_default(monkeypatch: MonkeyPatch) -> None:
     assert ldb.config.language == Language.EN
     assert ldb.config.use_cache is False
     assert ldb.config.cache_expire_after == 42
+
+
+def test_ldb_accepts_dict_config(monkeypatch: MonkeyPatch) -> None:
+    config_dict = {"api_key": "dummy", "language": "en"}
+    ldb = LDB(config=config_dict)  # type: ignore[arg-type]
+    assert ldb.config.api_key == "dummy"
+    assert ldb.config.language.name == "EN"
+
+
+def test_ldb_config_type_error() -> None:
+    with raises(TypeError):
+        LDB(config=123)  # type: ignore[arg-type]
+
+
+def test_config_invalid_language_string() -> None:
+    with raises(ValueError) as e:
+        LDBConfig(api_key="dummy", language="xx")  # type: ignore[arg-type]
+    assert "language must be one of" in str(e.value)
+
+
+def test_config_invalid_language_env(monkeypatch: MonkeyPatch) -> None:
+    monkeypatch.setenv("LDB_API_KEY", "dummy")
+    monkeypatch.setenv("LDB_LANGUAGE", "xx")
+    with raises(ValueError) as e:
+        LDBConfig(api_key="dummy", language="xx")  # type: ignore[arg-type]
+    assert "language must be one of" in str(e.value)

@@ -1,7 +1,7 @@
 [project]
 name = "pyLDB"
 version = "0.0.1"
-description = "A Pythonic interface for LDB (Local Data Bank) datasets."
+description = "A Pythonic interface for LDB (GUS Local Data Bank) datasets."
 readme = "README.md"
 authors = [{name = "Mikołaj Kaczmarek", email = "12432719+AN0DA@users.noreply.github.com"}]
 license = {text = "MIT"}
@@ -24,6 +24,7 @@ dev = [
     "bandit>=1.8.3",
     "mypy>=1.15.0",
     "notebook>=7.4.3",
+    "pytest-asyncio>=1.0.0",
     "pytest-cov>=6.0.0",
     "pytest-mock>=3.14.0",
     "pytest>=8.3.5",

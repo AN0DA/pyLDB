@@ -64,3 +64,97 @@ def test_get_variables_metadata(variables_api: VariablesAPI, api_url: str) -> No
     responses.add(responses.GET, url, json=payload, status=200)
     result = variables_api.get_variables_metadata()
     assert result["info"] == "Variables API"
+
+
+@responses.activate
+def test_list_variables_extra_query(variables_api: VariablesAPI, api_url: str) -> None:
+    url = f"{api_url}/variables?foo=bar&lang=en&page-size=100"
+    responses.add(responses.GET, url, json={"results": [{"id": "1"}]}, status=200)
+    result = variables_api.list_variables(extra_query={"foo": "bar"})
+    assert result[0]["id"] == "1"
+
+
+@responses.activate
+def test_get_variable_extra_query(variables_api: VariablesAPI, api_url: str) -> None:
+    url = f"{api_url}/variables/2?foo=bar&lang=en"
+    responses.add(responses.GET, url, json={"id": "2"}, status=200)
+    result = variables_api.get_variable(variable_id="2", extra_query={"foo": "bar"})
+    assert result["id"] == "2"
+
+
+@responses.activate
+def test_search_variables_all_branches(variables_api: VariablesAPI, api_url: str) -> None:
+    # all_pages True
+    url = f"{api_url}/variables/search?name=pop&lang=en&page-size=100"
+    responses.add(responses.GET, url, json={"results": [{"id": "1"}]}, status=200)
+    result = variables_api.search_variables(name="pop", all_pages=True)
+    assert result[0]["id"] == "1"
+    # all_pages False
+    url = f"{api_url}/variables/search?name=pop&lang=en&page-size=100"
+    responses.add(responses.GET, url, json={"results": [{"id": "2"}]}, status=200)
+    variables_api.fetch_single_result = lambda *a, **k: [{"id": "2"}]  # type: ignore[assignment]
+    result = variables_api.search_variables(name="pop", all_pages=False)
+    assert result[0]["id"] == "2"
+
+
+@responses.activate
+def test_search_variables_with_filters(variables_api: VariablesAPI, api_url: str) -> None:
+    params = {
+        "name": "pop",
+        "category-id": "cat",
+        "aggregate-id": "agg",
+        "sort": "name",
+        "foo": "bar",
+        "lang": "en",
+        "page-size": "100",
+    }
+    url = f"{api_url}/variables/search?{urlencode(params)}"
+    responses.add(responses.GET, url, json={"results": [{"id": "3"}]}, status=200)
+    result = variables_api.search_variables(
+        name="pop", category_id="cat", aggregate_id="agg", sort="name", extra_query={"foo": "bar"}, all_pages=True
+    )
+    assert result[0]["id"] == "3"
+
+
+class DummyException(Exception):
+    pass
+
+
+@responses.activate
+def test_list_variables_error(variables_api: VariablesAPI) -> None:
+    def raise_exc(*a: object, **k: object) -> None:
+        raise DummyException("fail")
+
+    variables_api.fetch_all_results = raise_exc  # type: ignore[assignment]
+    with pytest.raises(DummyException):
+        variables_api.list_variables()
+
+
+@responses.activate
+def test_get_variable_error(variables_api: VariablesAPI) -> None:
+    def raise_exc(*a: object, **k: object) -> None:
+        raise DummyException("fail")
+
+    variables_api.fetch_single_result = raise_exc  # type: ignore[assignment]
+    with pytest.raises(DummyException):
+        variables_api.get_variable("1")
+
+
+@responses.activate
+def test_search_variables_error(variables_api: VariablesAPI) -> None:
+    def raise_exc(*a: object, **k: object) -> None:
+        raise DummyException("fail")
+
+    variables_api.fetch_all_results = raise_exc  # type: ignore[assignment]
+    with pytest.raises(DummyException):
+        variables_api.search_variables(name="pop", all_pages=True)
+
+
+@responses.activate
+def test_get_variables_metadata_error(variables_api: VariablesAPI) -> None:
+    def raise_exc(*a: object, **k: object) -> None:
+        raise DummyException("fail")
+
+    variables_api.fetch_single_result = raise_exc  # type: ignore[assignment]
+    with pytest.raises(DummyException):
+        variables_api.get_variables_metadata()

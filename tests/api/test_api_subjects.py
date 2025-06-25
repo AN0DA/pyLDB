@@ -55,3 +55,69 @@ def test_get_subjects_metadata(subjects_api: SubjectsAPI, api_url: str) -> None:
     responses.add(responses.GET, url, json=payload, status=200)
     result = subjects_api.get_subjects_metadata()
     assert result["info"] == "Subjects API"
+
+
+@responses.activate
+def test_list_subjects_extra_query(subjects_api: SubjectsAPI, api_url: str) -> None:
+    url = f"{api_url}/subjects?foo=bar&lang=en&page-size=100"
+    responses.add(responses.GET, url, json={"results": [{"id": "A"}]}, status=200)
+    result = subjects_api.list_subjects(extra_query={"foo": "bar"})
+    assert result[0]["id"] == "A"
+
+
+@responses.activate
+def test_search_subjects_all_branches(subjects_api: SubjectsAPI, api_url: str) -> None:
+    # With only name
+    url = f"{api_url}/subjects/search?name=foo&lang=en&page-size=100"
+    responses.add(responses.GET, url, json={"results": [{"id": "A"}]}, status=200)
+    result = subjects_api.search_subjects(name="foo")
+    assert result[0]["id"] == "A"
+    # With all filters
+    url = f"{api_url}/subjects/search?name=foo&bar=baz&lang=en&page-size=100"
+    responses.add(responses.GET, url, json={"results": [{"id": "B"}]}, status=200)
+    result = subjects_api.search_subjects(name="foo", extra_query={"bar": "baz"})
+    assert result[0]["id"] == "B"
+
+
+class DummyException(Exception):
+    pass
+
+
+@responses.activate
+def test_list_subjects_error(subjects_api: SubjectsAPI) -> None:
+    def raise_exc(*a: object, **k: object) -> None:
+        raise DummyException("fail")
+
+    subjects_api.fetch_all_results = raise_exc  # type: ignore[assignment]
+    with pytest.raises(DummyException):
+        subjects_api.list_subjects()
+
+
+@responses.activate
+def test_get_subject_error(subjects_api: SubjectsAPI) -> None:
+    def raise_exc(*a: object, **k: object) -> None:
+        raise DummyException("fail")
+
+    subjects_api.fetch_single_result = raise_exc  # type: ignore[assignment]
+    with pytest.raises(DummyException):
+        subjects_api.get_subject("B")
+
+
+@responses.activate
+def test_search_subjects_error(subjects_api: SubjectsAPI) -> None:
+    def raise_exc(*a: object, **k: object) -> None:
+        raise DummyException("fail")
+
+    subjects_api.fetch_all_results = raise_exc  # type: ignore[assignment]
+    with pytest.raises(DummyException):
+        subjects_api.search_subjects(name="foo")
+
+
+@responses.activate
+def test_get_subjects_metadata_error(subjects_api: SubjectsAPI) -> None:
+    def raise_exc(*a: object, **k: object) -> None:
+        raise DummyException("fail")
+
+    subjects_api.fetch_single_result = raise_exc  # type: ignore[assignment]
+    with pytest.raises(DummyException):
+        subjects_api.get_subjects_metadata()
