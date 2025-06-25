@@ -122,7 +122,12 @@ class LDBConfig:
             try:
                 import json
 
-                self.custom_quotas = json.loads(env_quotas)
+                loaded_quotas = json.loads(env_quotas)
+                # Convert string keys to int if possible
+                if isinstance(loaded_quotas, dict):
+                    self.custom_quotas = {int(k): v for k, v in loaded_quotas.items()}
+                else:
+                    self.custom_quotas = loaded_quotas
             except Exception as e:
                 raise ValueError("LDB_QUOTAS must be a valid JSON string representing a dictionary") from e
         # Validate and merge custom_quotas
