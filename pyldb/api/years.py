@@ -11,16 +11,29 @@ class YearsAPI(BaseAPIClient):
     listing all years, retrieving year details, and accessing years API metadata.
     """
 
-    def list_years(self) -> list[int]:
+    def list_years(
+        self,
+        sort: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+    ) -> list[dict[str, Any]]:
         """
         List all available years for which data is present in the LDB API.
 
         Maps to: GET /years
 
+        Args:
+            extra_query: Additional query parameters.
+            sort: Optional sort parameter.
+
         Returns:
-            List of available years as integers.
+            List of available years as dicts.
         """
-        return self.fetch_single_result("years", results_key="years")
+        params: dict[str, Any] = {}
+        if sort:
+            params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
+        return self.fetch_all_results("years", params=params)
 
     def get_year(
         self,
@@ -53,16 +66,29 @@ class YearsAPI(BaseAPIClient):
         """
         return self.fetch_single_result("years/metadata")
 
-    async def alist_years(self) -> list[int]:
+    async def alist_years(
+        self,
+        sort: str | None = None,
+        extra_query: dict[str, Any] | None = None,
+    ) -> list[dict[str, Any]]:
         """
         Asynchronously list all available years for which data is present in the LDB API.
 
         Maps to: GET /years
 
+        Args:
+            extra_query: Additional query parameters.
+            sort: Optional sort parameter.
+
         Returns:
-            List of available years as integers.
+            List of available years as dicts.
         """
-        return await self.afetch_single_result("years", results_key="years")
+        params: dict[str, Any] = {}
+        if sort:
+            params["sort"] = sort
+        if extra_query:
+            params.update(extra_query)
+        return await self.afetch_all_results("years", params=params)
 
     async def aget_year(
         self,
