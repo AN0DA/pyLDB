@@ -138,6 +138,7 @@ class AsyncRateLimiter:
 
     async def acquire(self) -> None:
         now = time.time()
+        # Check all periods and raise immediately if any limit is exceeded
         for period in self.quotas:
             async with self.locks[period]:
                 q = self.calls[period]
@@ -150,6 +151,7 @@ class AsyncRateLimiter:
                     raise RuntimeError(
                         f"Rate limit exceeded: {limit} requests per {period}s. Try again in {wait:.1f}s."
                     )
+        # Record this call for all periods
         for period in self.quotas:
             self.calls[period].append(now)
         self._save_to_cache()
