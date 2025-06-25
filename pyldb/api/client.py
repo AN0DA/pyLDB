@@ -193,6 +193,8 @@ class BaseAPIClient:
                 response = self.session.request(method, next_url, headers=req_headers)
                 resp = self._process_response(response)
 
+            if results_key not in resp:
+                raise ValueError(f"Response does not contain key '{results_key}'")
             if not resp.get(results_key):
                 break
             yield resp
@@ -283,9 +285,11 @@ class BaseAPIClient:
                 page_size=page_size,
                 max_pages=max_pages,
             ):
+                if results_key not in page:
+                    raise ValueError(f"Response does not contain key '{results_key}'")
                 if first_page and return_metadata:
                     metadata = {k: v for k, v in page.items() if k not in {results_key, "page", "pageSize", "links"}}
-                    if progress_bar and "totalCount" in page:
+                    if progress_bar is not None and "totalCount" in page:
                         total_pages = (page["totalCount"] + page_size - 1) // page_size
                         total_pages = min(total_pages, max_pages) if max_pages else total_pages
                         progress_bar.total = total_pages
@@ -293,11 +297,11 @@ class BaseAPIClient:
 
                 all_results.extend(page.get(results_key, []))
 
-                if progress_bar:
+                if progress_bar is not None:
                     progress_bar.update(1)
                     progress_bar.set_postfix({"items": len(all_results)})
         finally:
-            if progress_bar:
+            if progress_bar is not None:
                 progress_bar.close()
 
         return (all_results, metadata) if return_metadata else all_results
@@ -562,20 +566,22 @@ class BaseAPIClient:
                 page_size=page_size,
                 max_pages=max_pages,
             ):
+                if results_key not in page:
+                    raise ValueError(f"Response does not contain key '{results_key}'")
                 if first_page and return_metadata:
                     metadata = {k: v for k, v in page.items() if k not in {results_key, "page", "pageSize", "links"}}
-                    if progress_bar and "totalCount" in page:
+                    if progress_bar is not None and "totalCount" in page:
                         total_pages = (page["totalCount"] + page_size - 1) // page_size
                         total_pages = min(total_pages, max_pages) if max_pages else total_pages
                         progress_bar.total = total_pages
                     first_page = False
 
                 all_results.extend(page.get(results_key, []))
-                if progress_bar:
+                if progress_bar is not None:
                     progress_bar.update(1)
                     progress_bar.set_postfix({"items": len(all_results)})
         finally:
-            if progress_bar:
+            if progress_bar is not None:
                 progress_bar.close()
 
         return (all_results, metadata) if return_metadata else all_results
