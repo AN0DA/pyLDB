@@ -26,23 +26,20 @@ DEFAULT_QUOTAS = {
 
 @dataclass
 class LDBConfig:
-    """Configuration for LDB API client.
+    """
+    Configuration for the LDB API client.
 
-    The configuration can be set in three ways (in order of precedence):
-
-    1. Direct parameter passing
-    2. Environment variables
-    3. Default values
-
+    This dataclass manages all configuration options for the LDB API client, supporting
+    direct parameter passing, environment variable overrides, and sensible defaults.
 
     Attributes:
-        api_key: API key for authentication
-        language: Language code for API responses (default: "pl")
-        use_cache: Whether to use request caching (default: True)
-        cache_expire_after: Cache expiration time in seconds (default: 3600)
-        proxy_url: Optional URL of the proxy server
-        proxy_username: Optional username for proxy authentication
-        proxy_password: Optional password for proxy authentication
+        api_key: API key for authentication (required).
+        language: Language code for API responses (default: "en").
+        use_cache: Whether to use request caching (default: True).
+        cache_expire_after: Cache expiration time in seconds (default: 3600).
+        proxy_url: Optional URL of the proxy server.
+        proxy_username: Optional username for proxy authentication.
+        proxy_password: Optional password for proxy authentication.
         custom_quotas: Optional custom quota dictionary (period: int).
         quota_cache_enabled: Enable persistent quota cache (default: True).
         quota_cache_file: Path to quota cache file (default: project .cache/pyldb).
@@ -62,7 +59,12 @@ class LDBConfig:
     use_global_cache: bool = field(default=False)
 
     def __post_init__(self) -> None:
-        """Initialize configuration values from environment variables if not set directly."""
+        """
+        Initialize configuration values from environment variables if not set directly.
+
+        Raises:
+            ValueError: If required configuration (e.g., API key) is missing or invalid.
+        """
         # Get API key from environment if not provided directly
         if self.api_key is None:
             self.api_key = os.getenv("LDB_API_KEY")

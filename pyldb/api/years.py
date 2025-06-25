@@ -11,29 +11,16 @@ class YearsAPI(BaseAPIClient):
     listing all years, retrieving year details, and accessing years API metadata.
     """
 
-    def list_years(
-        self,
-        sort: str | None = None,
-        extra_query: dict[str, Any] | None = None,
-    ) -> list[dict[str, Any]]:
+    def list_years(self) -> list[int]:
         """
-        List all available data years.
+        List all available years for which data is present in the LDB API.
 
         Maps to: GET /years
 
-        Args:
-            sort: Optional sorting order, e.g. 'Id', '-Id'.
-            extra_query: Additional query parameters, e.g. {'lang': 'en'}.
-
         Returns:
-            List of year metadata dictionaries.
+            List of available years as integers.
         """
-        params: dict[str, Any] = {}
-        if sort:
-            params["sort"] = sort
-        if extra_query:
-            params.update(extra_query)
-        return self.fetch_all_results("years", params=params)
+        return self.fetch_single_result("years", results_key="years")
 
     def get_year(
         self,
@@ -66,20 +53,16 @@ class YearsAPI(BaseAPIClient):
         """
         return self.fetch_single_result("years/metadata")
 
-    async def alist_years(
-        self,
-        sort: str | None = None,
-        extra_query: dict[str, Any] | None = None,
-    ) -> list[dict[str, Any]]:
+    async def alist_years(self) -> list[int]:
         """
-        Async version of list_years.
+        Asynchronously list all available years for which data is present in the LDB API.
+
+        Maps to: GET /years
+
+        Returns:
+            List of available years as integers.
         """
-        params: dict[str, Any] = {}
-        if sort:
-            params["sort"] = sort
-        if extra_query:
-            params.update(extra_query)
-        return await self.afetch_all_results("years", params=params)
+        return await self.afetch_single_result("years", results_key="years")
 
     async def aget_year(
         self,

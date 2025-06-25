@@ -13,7 +13,20 @@ user_cache_dir: Any | None = _user_cache_dir
 
 
 class PersistentQuotaCache:
+    """
+    Persistent cache for API quota usage, stored on disk.
+
+    This class provides thread-safe, persistent storage for quota usage data,
+    allowing rate limiters to survive process restarts and share state between sessions.
+    """
+
     def __init__(self, enabled: bool = True) -> None:
+        """
+        Initialize the persistent quota cache.
+
+        Args:
+            enabled: Whether to enable persistent caching.
+        """
         self.enabled = enabled
         self.cache_file = get_cache_file_path("quota_cache.json")
         self._lock = threading.Lock()
@@ -22,6 +35,9 @@ class PersistentQuotaCache:
             self._load()
 
     def _load(self) -> None:
+        """
+        Load quota data from the cache file.
+        """
         try:
             with open(self.cache_file) as f:
                 self._data = json.load(f)
@@ -29,6 +45,9 @@ class PersistentQuotaCache:
             self._data = {}
 
     def _save(self) -> None:
+        """
+        Save quota data to the cache file.
+        """
         if not self.enabled:
             return
         try:
@@ -38,12 +57,27 @@ class PersistentQuotaCache:
             raise RuntimeError(f"Failed to save quota cache to {self.cache_file}") from e
 
     def get(self, key: str) -> Any:
+        """
+        Retrieve a cached value by key.
+
+        Args:
+            key: Cache key.
+        Returns:
+            Cached value, or [] if not found or disabled.
+        """
         if not self.enabled:
             return []
         with self._lock:
             return self._data.get(key, [])
 
     def set(self, key: str, value: Any) -> None:
+        """
+        Set a cached value by key and persist it.
+
+        Args:
+            key: Cache key.
+            value: Value to store.
+        """
         if not self.enabled:
             return
         with self._lock:
@@ -52,9 +86,23 @@ class PersistentQuotaCache:
 
 
 class RateLimiter:
+    """
+    Thread-safe synchronous rate limiter for API requests.
+
+    Enforces multiple quota periods (e.g., per second, per minute) and persists usage if a cache is provided.
+    """
+
     def __init__(
         self, quotas: dict[int, int | tuple], is_registered: bool, cache: PersistentQuotaCache | None = None
     ) -> None:
+        """
+        Initialize the rate limiter.
+
+        Args:
+            quotas: Dictionary of {period_seconds: limit or (anon_limit, reg_limit)}.
+            is_registered: Whether the user is registered (affects quota).
+            cache: Optional persistent cache for quota usage.
+        """
         self.quotas = quotas
         self.is_registered = is_registered
         self.lock = threading.Lock()
@@ -84,6 +132,12 @@ class RateLimiter:
             self.cache.set(f"{self.cache_key}_{period}", list(self.calls[period]))
 
     def acquire(self) -> None:
+        """
+        Acquire a slot for an API request, blocking if over quota.
+
+        Raises:
+            RuntimeError: If the rate limit is exceeded for any period.
+        """
         now = time.time()
         with self.lock:
             for period in self.quotas:
@@ -105,9 +159,23 @@ class RateLimiter:
 
 
 class AsyncRateLimiter:
+    """
+    Asyncio-compatible rate limiter for API requests.
+
+    Enforces multiple quota periods and persists usage if a cache is provided.
+    """
+
     def __init__(
         self, quotas: dict[int, int | tuple], is_registered: bool, cache: PersistentQuotaCache | None = None
     ) -> None:
+        """
+        Initialize the async rate limiter.
+
+        Args:
+            quotas: Dictionary of {period_seconds: limit or (anon_limit, reg_limit)}.
+            is_registered: Whether the user is registered (affects quota).
+            cache: Optional persistent cache for quota usage.
+        """
         self.quotas = quotas
         self.is_registered = is_registered
         self.locks = {period: asyncio.Lock() for period in quotas}
@@ -137,6 +205,12 @@ class AsyncRateLimiter:
             self.cache.set(f"{self.cache_key}_{period}", list(self.calls[period]))
 
     async def acquire(self) -> None:
+        """
+        Acquire a slot for an API request asynchronously, raising if over quota.
+
+        Raises:
+            RuntimeError: If the rate limit is exceeded for any period.
+        """
         now = time.time()
         # Check all periods and raise immediately if any limit is exceeded
         for period in self.quotas:

@@ -12,17 +12,22 @@ class VersionAPI(BaseAPIClient):
 
     def get_version(self) -> dict[str, Any]:
         """
-        Retrieve API version and build information.
+        Retrieve the API version and build information.
 
         Maps to: GET /version
 
         Returns:
-            Dictionary with version and build information.
+            Dictionary with version and build metadata.
         """
         return self.fetch_single_result("version")
 
     async def aget_version(self) -> dict[str, Any]:
         """
-        Async version of get_version.
+        Asynchronously retrieve the API version and build information.
+
+        Maps to: GET /version
+
+        Returns:
+            Dictionary with version and build metadata.
         """
         return await self.afetch_single_result("version")

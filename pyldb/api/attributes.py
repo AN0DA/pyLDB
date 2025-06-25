@@ -50,18 +50,36 @@ class AttributesAPI(BaseAPIClient):
 
     async def alist_attributes(self) -> list[dict[str, Any]]:
         """
-        Async version of list_attributes.
+        Asynchronously list all attributes, optionally filtered by variable.
+
+        Maps to: GET /attributes
+
+        Returns:
+            List of attribute metadata dictionaries.
         """
         return await self.afetch_all_results("attributes")
 
     async def aget_attribute(self, attribute_id: str) -> dict[str, Any]:
         """
-        Async version of get_attribute.
+        Asynchronously retrieve metadata details for a specific attribute.
+
+        Maps to: GET /attributes/{id}
+
+        Args:
+            attribute_id: Attribute identifier.
+
+        Returns:
+            Dictionary with attribute metadata.
         """
         return await self.afetch_single_result(f"attributes/{attribute_id}")
 
     async def aget_attributes_metadata(self) -> dict[str, Any]:
         """
-        Async version of get_attributes_metadata.
+        Asynchronously retrieve general metadata and version information for the /attributes endpoint.
+
+        Maps to: GET /attributes/metadata
+
+        Returns:
+            Dictionary with API metadata and versioning info.
         """
         return await self.afetch_single_result("attributes/metadata")

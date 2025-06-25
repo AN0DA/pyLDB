@@ -72,7 +72,16 @@ class MeasuresAPI(BaseAPIClient):
         extra_query: dict[str, Any] | None = None,
     ) -> list[dict[str, Any]]:
         """
-        Async version of list_measures.
+        Asynchronously list all measure units, optionally sorted.
+
+        Maps to: GET /measures
+
+        Args:
+            sort: Optional sorting order, e.g. 'Id', '-Id', 'Name', '-Name'.
+            extra_query: Additional query parameters.
+
+        Returns:
+            List of measure unit metadata dictionaries.
         """
         params: dict[str, Any] = {}
         if sort:
@@ -87,13 +96,27 @@ class MeasuresAPI(BaseAPIClient):
         extra_query: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """
-        Async version of get_measure.
+        Asynchronously retrieve metadata for a specific measure unit.
+
+        Maps to: GET /measures/{id}
+
+        Args:
+            measure_id: Measure unit identifier (integer).
+            extra_query: Additional query parameters.
+
+        Returns:
+            Dictionary with measure unit metadata.
         """
         params = extra_query if extra_query else None
         return await self.afetch_single_result(f"measures/{measure_id}", params=params)
 
     async def aget_measures_metadata(self) -> dict[str, Any]:
         """
-        Async version of get_measures_metadata.
+        Asynchronously retrieve general metadata and version information for the /measures endpoint.
+
+        Maps to: GET /measures/metadata
+
+        Returns:
+            Dictionary with endpoint metadata and versioning info.
         """
         return await self.afetch_single_result("measures/metadata")

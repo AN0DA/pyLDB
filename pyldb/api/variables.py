@@ -157,7 +157,22 @@ class VariablesAPI(BaseAPIClient):
         all_pages: bool = True,
     ) -> list[dict[str, Any]]:
         """
-        Async version of list_variables.
+        Asynchronously list all variables, optionally filtered by category, aggregate, or name.
+
+        Maps to: GET /variables
+
+        Args:
+            category_id: Optional category ID to filter variables.
+            aggregate_id: Optional aggregate ID to filter variables.
+            name: Optional substring to search in variable name.
+            sort: Optional sorting order, e.g. 'id', '-id', 'name', '-name'.
+            page_size: Number of results per page.
+            max_pages: Maximum number of pages to fetch (None for all).
+            extra_query: Additional query parameters.
+            all_pages: If True, fetch all pages; otherwise, fetch only the first.
+
+        Returns:
+            List of variable metadata dictionaries.
         """
         params: dict[str, Any] = {}
         if category_id:
@@ -187,7 +202,16 @@ class VariablesAPI(BaseAPIClient):
         extra_query: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """
-        Async version of get_variable.
+        Asynchronously retrieve metadata details for a specific variable.
+
+        Maps to: GET /variables/{id}
+
+        Args:
+            variable_id: Variable identifier.
+            extra_query: Additional query parameters.
+
+        Returns:
+            Dictionary with variable metadata.
         """
         params = extra_query if extra_query else None
         return await self.afetch_single_result(f"variables/{variable_id}", params=params)
@@ -204,7 +228,22 @@ class VariablesAPI(BaseAPIClient):
         all_pages: bool = True,
     ) -> list[dict[str, Any]]:
         """
-        Async version of search_variables.
+        Asynchronously search for variables by name and optional filters.
+
+        Maps to: GET /variables/search
+
+        Args:
+            name: Substring to search in variable name.
+            category_id: Optional category ID to filter variables.
+            aggregate_id: Optional aggregate ID to filter variables.
+            sort: Optional sorting order.
+            page_size: Number of results per page.
+            max_pages: Maximum number of pages to fetch (None for all).
+            extra_query: Additional query parameters.
+            all_pages: If True, fetch all pages; otherwise, fetch only the first.
+
+        Returns:
+            List of variable metadata dictionaries.
         """
         params: dict[str, Any] = {}
         if name:
@@ -230,6 +269,11 @@ class VariablesAPI(BaseAPIClient):
 
     async def aget_variables_metadata(self) -> dict[str, Any]:
         """
-        Async version of get_variables_metadata.
+        Asynchronously retrieve general metadata and version information for the /variables endpoint.
+
+        Maps to: GET /variables/metadata
+
+        Returns:
+            Dictionary with endpoint metadata and versioning info.
         """
         return await self.afetch_single_result("variables/metadata")

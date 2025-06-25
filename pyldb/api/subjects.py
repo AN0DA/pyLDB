@@ -124,7 +124,20 @@ class SubjectsAPI(BaseAPIClient):
         all_pages: bool = True,
     ) -> list[dict[str, Any]]:
         """
-        Async version of list_subjects.
+        Asynchronously list all subjects, optionally filtered by parent subject.
+
+        Maps to: GET /subjects
+
+        Args:
+            parent_id: Optional parent subject ID. If not specified, returns all top-level subjects.
+            sort: Optional sorting order, e.g. 'id', '-id', 'name', '-name'.
+            page_size: Number of results per page.
+            max_pages: Maximum number of pages to fetch (None for all).
+            extra_query: Additional query parameters.
+            all_pages: If True, fetch all pages; otherwise, fetch only the first.
+
+        Returns:
+            List of subject metadata dictionaries.
         """
         params: dict[str, Any] = {}
         if parent_id:
@@ -149,7 +162,15 @@ class SubjectsAPI(BaseAPIClient):
         subject_id: str,
     ) -> dict[str, Any]:
         """
-        Async version of get_subject.
+        Asynchronously retrieve metadata for a specific subject.
+
+        Maps to: GET /subjects/{id}
+
+        Args:
+            subject_id: Subject identifier.
+
+        Returns:
+            Dictionary with subject metadata.
         """
         return await self.afetch_single_result(f"subjects/{subject_id}")
 
@@ -161,7 +182,18 @@ class SubjectsAPI(BaseAPIClient):
         extra_query: dict[str, Any] | None = None,
     ) -> list[dict[str, Any]]:
         """
-        Async version of search_subjects.
+        Asynchronously search for subjects by name.
+
+        Maps to: GET /subjects/search
+
+        Args:
+            name: Subject name to search for.
+            page_size: Number of results per page.
+            max_pages: Maximum number of pages to fetch (None for all).
+            extra_query: Additional query parameters.
+
+        Returns:
+            List of subject metadata dictionaries matching the search.
         """
         params: dict[str, Any] = {"name": name}
         if extra_query:
@@ -176,6 +208,11 @@ class SubjectsAPI(BaseAPIClient):
 
     async def aget_subjects_metadata(self) -> dict[str, Any]:
         """
-        Async version of get_subjects_metadata.
+        Asynchronously retrieve general metadata and version information for the /subjects endpoint.
+
+        Maps to: GET /subjects/metadata
+
+        Returns:
+            Dictionary with endpoint metadata and versioning info.
         """
         return await self.afetch_single_result("subjects/metadata")

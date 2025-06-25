@@ -26,11 +26,11 @@ class BaseAPIClient:
 
     def __init__(self, config: LDBConfig, extra_headers: dict[str, str] | None = None):
         """
-        Initialize base API client.
+        Initialize base API client for LDB.
 
         Args:
-            config: LDB configuration.
-            extra_headers: Optional extra headers (e.g. Accept-Language).
+            config: LDB configuration object.
+            extra_headers: Optional extra headers (e.g., Accept-Language) to include in requests.
         """
         self.config = config
         self.session: CachedSession | Session
@@ -91,12 +91,32 @@ class BaseAPIClient:
         self._async_limiter = BaseAPIClient._global_async_limiter
 
     def _build_url(self, endpoint: str) -> str:
-        """Build full API URL."""
+        """
+        Build the full API URL for a given endpoint.
+
+        Args:
+            endpoint: API endpoint path (without base URL).
+
+        Returns:
+            Full URL string for the API endpoint.
+        """
         endpoint = endpoint.strip("/")
         return f"{LDB_API_BASE_URL}/{endpoint}"
 
     def _process_response(self, response: Response) -> dict[str, Any]:
-        """Process and validate API response."""
+        """
+        Process and validate an API response.
+
+        Args:
+            response: HTTP response object.
+
+        Returns:
+            Decoded JSON response as a dictionary.
+
+        Raises:
+            RuntimeError: If the response contains an HTTP error.
+            ValueError: If the API returns an error in the response body.
+        """
         try:
             response.raise_for_status()
         except HTTPError as exc:
@@ -252,7 +272,7 @@ class BaseAPIClient:
         show_progress: bool = True,
     ) -> list[dict[str, Any]] | tuple[list[dict[str, Any]], dict[str, Any]]:
         """
-        Fetch paginated results (sync) and combine them into a single list.
+        Fetch paginated results synchronously and combine them into a single list.
 
         Args:
             endpoint: API endpoint.
@@ -545,7 +565,21 @@ class BaseAPIClient:
         show_progress: bool = True,
     ) -> list[dict[str, Any]] | tuple[list[dict[str, Any]], dict[str, Any]]:
         """
-        Async version of fetch_all_results.
+        Asynchronously fetch paginated results and combine them into a single list.
+
+        Args:
+            endpoint: API endpoint.
+            method: HTTP method (default: GET).
+            params: Query parameters.
+            headers: Optional request headers.
+            results_key: Key for extracting data from each page.
+            page_size: Items per page.
+            max_pages: Optional limit of pages.
+            return_metadata: If True, return (results, metadata).
+            show_progress: Display progress via tqdm.
+
+        Returns:
+            Combined list of results, optionally with metadata.
         """
         all_results: list[dict[str, Any]] = []
         metadata: dict[str, Any] = {}
@@ -650,7 +684,18 @@ class BaseAPIClient:
         | tuple[list[dict[str, Any]], dict[str, Any]]
     ):
         """
-        Async version of fetch_single_result.
+        Asynchronously fetch a single result, non-paginated.
+
+        Args:
+            endpoint: API endpoint.
+            results_key: If not None, extract this key from the JSON.
+            method: HTTP method.
+            params: Query parameters.
+            headers: Optional request headers.
+            return_metadata: Also return metadata if True.
+
+        Returns:
+            Dictionary or list, optionally with separate metadata.
         """
         response = await self._request_async(
             endpoint=endpoint,
